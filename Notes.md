@@ -1,9 +1,9 @@
 # Contents
 
-1. January 8: [TypeScript Fundamentals](#p1)
+1. January 8: [TypeScript Fundamentals](#p-1)
 
 
-## Typescript Fundamentals {#p1}
+## Typescript Fundamentals {#p-1}
 <!--{-->
 
 - JavaScript doesn't have explicit types and tries to convert as needed.
@@ -51,11 +51,11 @@ let driver: Person {
 }
 ```
 
-    - We can make two types of types:
-        - Union: `type OneOrTwoOrBoth = TypeOne | TypeTwo`
-            - We can be of TypeOne, of TypeTwo, or Both of them
-        - Intersect: `type OneAndTwo = TypeOne & TypeTwo`
-            - We have to have something with all attributes from both (except the optionals)
+- We can make two types of types:
+    - Union: `type OneOrTwoOrBoth = TypeOne | TypeTwo`
+        - We can be of TypeOne, of TypeTwo, or Both of them
+    - Intersect: `type OneAndTwo = TypeOne & TypeTwo`
+        - We have to have something with all attributes from both (except the optionals)
 - Tuples:
     - We have to be explicit here, if we aren't, the thing is inferred as an array
         - i.e. `let a: [number, number] = [2, 4]`
