@@ -2,7 +2,7 @@
 
 1. January 8: [TypeScript Fundamentals](#typescript-fundamentals)
 2. January 13: [TypeScript Fundamentals Continued](#typescript-fundamentals-continued)
-
+3. January 15: [React](#react)
 
 ## Typescript Fundamentals
 <!--{-->
@@ -114,9 +114,65 @@ function buildName(first: string, ...restOfName: string[]) {
 
 <!--}-->
 
+## React
+<!--{-->
+
+## React intro
+
+- React has these benefits:
+    - It has a component-based architecture (good for modular code)
+    - It has a virtual DOM, which mirrors the webpage DOM
+    - It has unidirectional data flow (as a design)
+    - It has React Native, which is for mobile applications
+- The DOM is how we make webpages and has the following features:
+    - It has a tree structure representing the webpage
+    - It can be manipulated by scripts, so it is dynamic and live
+    - It can work in multiple different browsers
+- Contrasting older vs. newer webpages:
+    - Older would:
+        - Load a page
+        - Send a request to the server upon interaction
+        - Receive and display a new page
+    - Newer do:
+        - Load a page
+        - Request only necessary data
+        - Update the page without hitting the server
+- Something like ternary operators:
+    - You can use: `boolExpr() && thingYouWantToRender()`
+    - If false, the second part won't "evaluate" (won't render)
+    - If true, it will
+
+## Routing
+
+- Routing is to help us learn from the URL where to go, since we don't have separate HTML pages with an SPA
+- Routing is pretty much a big switch statement. We can use different comparisons to see where to go:
+    - Path: `path="/pathName"`
+    - Index: You can put `index` in the component and then use `<Navigate to="/path"/>`
+    - Dynamic: `path="/path/:variablePath"`
+    - Optional segments: `path="/path:optionalPath?"`
+    - Splat: `path="/user/*"`
+    - Wildcard: `path="*"`, catches anything (put at the end)
+- If you want to have something that is the same in every page, put it outside of the `<BrowserRouter>`
+    - If you want something in a lower level route that appears in its sub pages, you can nest `<Route>`s
+        - You have the main Route element, and somewhere in it you have an `<Outlet>`
+        - You define other Routes as children of the parent Route
+        - Whichever you have chosen gets populated into that `<Outlet>` element
+- All of this depends on the location (as specified in the URL), so how do we change the URL
+    - We can use these from `'react-router-dom'`
+        - `const navigate = useNavigate(); navigate("/path")`
+        - `<Link to="/path">LinkName</Link>`
+        - `<NavLink>` -> may add bolding to the links
+        - Fun fact: don't use / and the path name will be appended, else it will create an entirely new link
+
+<!--}-->
+
 ## Default
 <!--{-->
 
 - 
 
 <!--}-->
+
+
+
+
