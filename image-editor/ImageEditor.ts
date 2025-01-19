@@ -1,6 +1,9 @@
+// imports
 import { argv, exit } from 'node:process'
 import { readFileSync, writeFileSync } from 'node:fs';
 
+
+// create classes
 class Color {
     public red: number
     public green: number
@@ -37,6 +40,9 @@ class Image {
     }
 }
 
+
+
+// create functions
 let usage = () => {
     console.log('USAGE: npm run start <inputFile> <outputFile> <grayscale|invert|emboss|motionblur> {motion-blur-length}')
     exit()
@@ -58,21 +64,23 @@ let read = (filePath: string): Image => {
     let image: Image = new Image(width, height)
 
     // get the actual pixel values
-    const numData: number[] = data.map(Number)
-    for(const num of numData) {
+    let numData: number[] = []
+    for(let x = 0; x < 3 * height * width; ++x) {
+        let num: number = Number(data[4 + x])
         if(Number.isNaN(num)) {
             console.log("ERROR: file format is incorrect")
             exit()
         }
+        numData.push(num)
     }
 
     // Fill in the image array
     for(let y = 0; y < height; ++y) {
         for(let x = 0; x < width; ++x) {
             let color: Color = new Color()
-            color.red = numData[3 * x]
-            color.green = numData[3 * x + 1]
-            color.blue = numData[3 * x + 2]
+            color.red = numData[3 * (x + y * height)]
+            color.green = numData[3 * (x + y * height) + 1]
+            color.blue = numData[3 * (x + y * height) + 2]
             image.set(x, y, color)
         }
     }
@@ -80,18 +88,19 @@ let read = (filePath: string): Image => {
     return image
 }
 
-let write = (image: Image, filePath: string) {
+let write = (image: Image, filePath: string) => {
     let height = image.getHeight()
     let width = image.getWidth()
 
     // construct the output data
     let outputData: string = ""
-    outputData += "P3 " + String(width) + " " + String(height) + " 255"
+    outputData += "P3\r\n" + String(width) + " " + String(height) + "\r\n255\r\n"
     for(let y = 0; y < height; ++y) {
         for(let x = 0; x < width; ++x) {
             let color: Color = image.get(x, y)
-            outputData += " " + String(color.red) + " " + String(color.green) + " " + String(color.blue)
+            outputData += (x == 0 ? "" : " ") + String(color.red) + " " + String(color.green) + " " + String(color.blue)
         }
+        outputData += "\r\n"
     }
 
     writeFileSync(filePath, outputData, "utf8")
@@ -177,7 +186,10 @@ let motionblur = (image: Image, length: number) => {
     }
 }
 
-// Check the args
+
+
+
+// run the program
 let args: string[] = argv.slice(2)
 if(args.length < 3) {
     usage()
@@ -188,7 +200,6 @@ let filter: string = args[2]
 
 let image: Image = read(inputFile)
 
-// Do the correct transformation
 if(filter === "grayscale") {
     if(args.length != 3) {
         usage()
