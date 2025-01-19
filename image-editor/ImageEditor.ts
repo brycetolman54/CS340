@@ -48,61 +48,45 @@ let usage = () => {
     exit()
 }
 
-let getNum = (stringData: string): number[] => {
-    let index: number = stringData.indexOf(' ')
-    let numString: string = stringData.substring(0, index)
-    let num: number = Number(numString)
-    if(Number.isNaN(num)) {
-        console.log("ERROR: file format is incorrect", numString)
-        exit()
-    }
-    return [num, index]
-}
-
 let read = (filePath: string): Image => {
     
     // read file into an array
     let stringData: string = readFileSync(filePath, "utf8")
+    const data: string[] = stringData.split(/\s+/)
     
     // create Image object
-    let index: number = stringData.indexOf(' ')
-    let num: number
-    stringData = stringData.substring(index + 1);
-
-    [num, index] = getNum(stringData)
-    let width = num
-    stringData = stringData.substring(index + 1);
-
-    [num, index] = getNum(stringData)
-    let height = num
-    stringData = stringData.substring(index + 1)
-
-    index = stringData.indexOf(' ')
-    stringData = stringData.substring(index + 1)
-
+    let width: number = Number(data[1])
+    let height: number = Number(data[2])
+  
     if(Number.isNaN(width) || Number.isNaN(height)) {
         console.log("ERROR: file format is incorrect")
         exit()
     }
     let image: Image = new Image(width, height)
 
+    // get the actual pixel values
+    let numData: number[] = []
+    for(let x = 0; x < 3 * height * width; ++x) {
+        let num: number = Number(data[4 + x])
+        if(Number.isNaN(num)) {
+            console.log("ERROR: file format is incorrect")
+            exit()
+        }
+        numData.push(num)
+    }
+
     // Fill in the image array
+    let total: number = 0
     for(let y = 0; y < height; ++y) {
         for(let x = 0; x < width; ++x) {
             let color: Color = new Color()
 
-            let [num, index] = getNum(stringData)
-            color.red = num
-            stringData = stringData.substring(index + 1);
-            
-            [num, index] = getNum(stringData)
-            color.green = num
-            stringData = stringData.substring(index + 1);
+            color.red = numData[total]
+            color.green = numData[total + 1]
+            color.blue = numData[total + 2]
 
-            [num, index] = getNum(stringData)
-            color.blue = num
-            stringData = stringData.substring(index + 1)
-            
+            total += 3
+
             image.set(x, y, color)
         }
     }
