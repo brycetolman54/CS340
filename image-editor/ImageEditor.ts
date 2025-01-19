@@ -134,8 +134,8 @@ let invert = (image: Image) => {
 }
 
 let emboss = (image: Image) => {
-    for(let x = 0; x < image.getWidth(); ++x) {
-        for(let y = 0; y< image.getHeight(); ++y) {
+    for(let x = image.getWidth() - 1; x >= 0; --x) {
+        for(let y = image.getHeight() -1; y >= 0; --y) {
             let curColor: Color = image.get(x, y)
 
             let diff: number = 0
@@ -147,17 +147,17 @@ let emboss = (image: Image) => {
                 if(Math.abs(curColor.green - upLeftColor.green) > Math.abs(diff)) {
                     diff = curColor.green - upLeftColor.green
                 }
-                if(Math.abs(curColor.blue = upLeftColor.blue) > Math.abs(diff)) {
+                if(Math.abs(curColor.blue - upLeftColor.blue) > Math.abs(diff)) {
                     diff = curColor.blue - upLeftColor.blue
                 }
-
-                let grayLevel: number = 128 + diff
-                grayLevel = Math.max(0, Math.min(grayLevel, 255))
-
-                curColor.red = grayLevel
-                curColor.green = grayLevel
-                curColor.blue = grayLevel
             }
+
+            let grayLevel: number = 128 + diff
+            grayLevel = Math.max(0, Math.min(grayLevel, 255))
+
+            curColor.red = grayLevel
+            curColor.green = grayLevel
+            curColor.blue = grayLevel
         }
     }
 }
@@ -233,6 +233,9 @@ else if(filter === "motionblur") {
     }
 
     motionblur(image, length)
+}
+else if(filter === "none") {
+    
 }
 else {
     usage()
