@@ -1,6 +1,6 @@
 // imports
 import { argv, exit } from 'node:process'
-import { createReadStream, readFile, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 
 // create classes
@@ -48,46 +48,61 @@ let usage = () => {
     exit()
 }
 
+let getNum = (stringData: string): number[] => {
+    let index: number = stringData.indexOf(' ')
+    let numString: string = stringData.substring(0, index)
+    let num: number = Number(numString)
+    if(Number.isNaN(num)) {
+        console.log("ERROR: file format is incorrect", numString)
+        exit()
+    }
+    return [num, index]
+}
+
 let read = (filePath: string): Image => {
     
     // read file into an array
-    // const stringData: string = readFileSync(filePath, "utf8")
-    readFile(filePath, "utf8", (err, data) => {
-        if(err) {
-            console.log("ERROR: file not read properly")
-            exit()
-        }
-        stringData = data
-    })
-    const data: string[] = stringData.split(/\s+/)
+    let stringData: string = readFileSync(filePath, "utf8")
     
     // create Image object
-    let width: number = Number(data[1])
-    let height: number = Number(data[2])
+    let index: number = stringData.indexOf(' ')
+    let num: number
+    stringData = stringData.substring(index + 1);
+
+    [num, index] = getNum(stringData)
+    let width = num
+    stringData = stringData.substring(index + 1);
+
+    [num, index] = getNum(stringData)
+    let height = num
+    stringData = stringData.substring(index + 1)
+
+    index = stringData.indexOf(' ')
+    stringData = stringData.substring(index + 1)
+
     if(Number.isNaN(width) || Number.isNaN(height)) {
         console.log("ERROR: file format is incorrect")
         exit()
     }
     let image: Image = new Image(width, height)
 
-    // get the actual pixel values
-    let numData: number[] = []
-    for(let x = 0; x < 3 * height * width; ++x) {
-        let num: number = Number(data[4 + x])
-        if(Number.isNaN(num)) {
-            console.log("ERROR: file format is incorrect")
-            exit()
-        }
-        numData.push(num)
-    }
-
     // Fill in the image array
     for(let y = 0; y < height; ++y) {
         for(let x = 0; x < width; ++x) {
             let color: Color = new Color()
-            color.red = numData[3 * (x + y * height)]
-            color.green = numData[3 * (x + y * height) + 1]
-            color.blue = numData[3 * (x + y * height) + 2]
+
+            let [num, index] = getNum(stringData)
+            color.red = num
+            stringData = stringData.substring(index + 1);
+            
+            [num, index] = getNum(stringData)
+            color.green = num
+            stringData = stringData.substring(index + 1);
+
+            [num, index] = getNum(stringData)
+            color.blue = num
+            stringData = stringData.substring(index + 1)
+            
             image.set(x, y, color)
         }
     }
@@ -101,20 +116,13 @@ let write = (image: Image, filePath: string) => {
 
     // construct the output data
     let outputData: string = ""
-    // outputData += "P3\r\n" + String(width) + " " + String(height) + "\r\n255\r\n"
-    // for(let y = 0; y < height; ++y) {
-    //     for(let x = 0; x < width; ++x) {
-    //         let color: Color = image.get(x, y)
-    //         outputData += (x == 0 ? "" : " ") + String(color.red) + " " + String(color.green) + " " + String(color.blue)
-    //     }
-    //     outputData += "\r\n"
-    // }
-    outputData += "P3 " + String(width) + " " + String(height) + " 255"
+    outputData += "P3\r\n" + String(width) + " " + String(height) + "\r\n255\r\n"
     for(let y = 0; y < height; ++y) {
         for(let x = 0; x < width; ++x) {
             let color: Color = image.get(x, y)
-            outputData += " " + String(color.red) + " " + String(color.green) + " " + String(color.blue)
+            outputData += (x == 0 ? "" : " ") + String(color.red) + " " + String(color.green) + " " + String(color.blue)
         }
+        outputData += "\r\n"
     }
 
     writeFileSync(filePath, outputData, "utf8")
