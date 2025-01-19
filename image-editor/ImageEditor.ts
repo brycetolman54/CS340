@@ -1,6 +1,6 @@
 // imports
 import { argv, exit } from 'node:process'
-import { readFileSync, writeFileSync } from 'node:fs';
+import { createReadStream, readFile, readFileSync, writeFileSync } from 'node:fs';
 
 
 // create classes
@@ -51,7 +51,14 @@ let usage = () => {
 let read = (filePath: string): Image => {
     
     // read file into an array
-    const stringData: string = readFileSync(filePath, "utf8")
+    // const stringData: string = readFileSync(filePath, "utf8")
+    readFile(filePath, "utf8", (err, data) => {
+        if(err) {
+            console.log("ERROR: file not read properly")
+            exit()
+        }
+        stringData = data
+    })
     const data: string[] = stringData.split(/\s+/)
     
     // create Image object
@@ -94,13 +101,20 @@ let write = (image: Image, filePath: string) => {
 
     // construct the output data
     let outputData: string = ""
-    outputData += "P3\r\n" + String(width) + " " + String(height) + "\r\n255\r\n"
+    // outputData += "P3\r\n" + String(width) + " " + String(height) + "\r\n255\r\n"
+    // for(let y = 0; y < height; ++y) {
+    //     for(let x = 0; x < width; ++x) {
+    //         let color: Color = image.get(x, y)
+    //         outputData += (x == 0 ? "" : " ") + String(color.red) + " " + String(color.green) + " " + String(color.blue)
+    //     }
+    //     outputData += "\r\n"
+    // }
+    outputData += "P3 " + String(width) + " " + String(height) + " 255"
     for(let y = 0; y < height; ++y) {
         for(let x = 0; x < width; ++x) {
             let color: Color = image.get(x, y)
-            outputData += (x == 0 ? "" : " ") + String(color.red) + " " + String(color.green) + " " + String(color.blue)
+            outputData += " " + String(color.red) + " " + String(color.green) + " " + String(color.blue)
         }
-        outputData += "\r\n"
     }
 
     writeFileSync(filePath, outputData, "utf8")
@@ -235,7 +249,7 @@ else if(filter === "motionblur") {
     motionblur(image, length)
 }
 else if(filter === "none") {
-    
+
 }
 else {
     usage()
