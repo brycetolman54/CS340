@@ -26,7 +26,7 @@ for test in ${tests[@]}; do
         fi
 
         # see if there are differences
-        diff "ImageEditorFiles/key_images/"$test"-"$file mine.ppm > test.txt
+        diff "ImageEditorFiles/key_images/"$test"-"$file mine.ppm 2>&1 > test.txt
 
         # print out to let me know which is different
         value=""

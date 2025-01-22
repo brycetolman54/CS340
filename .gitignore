@@ -1,1 +1,35 @@
 node_modules/
+
+image-editor/ImageEditorFiles/*
+image-editor/dist/*
+
+tweeter/package-lock.json
+tweeter/package.json
+tweeter/tweeter-shared/package.json
+tweeter/tweeter-web/package.json
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+tweeter/node_modules
+tweeter/.pnp
+tweeter/.pnp.js
+
+# testing
+tweeter/coverage
+
+# production
+tweeter/build
+
+# misc
+tweeter/.DS_Store
+.tweeter/env.local
+.tweeter/env.development.local
+.tweeter/env.test.local
+.tweeter/env.production.local
+
+tweeter/npm-debug.log*
+tweeter/yarn-debug.log*
+tweeter/yarn-error.log*
+
+tweeter/dist
