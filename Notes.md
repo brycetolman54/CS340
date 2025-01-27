@@ -214,6 +214,7 @@ function buildName(first: string, ...restOfName: string[]) {
     - It is a box, like a Class, that connects to the association line between the other classes
 
 - Here is a sequence diagram
+
 ![Diagram](./diagrams/D1.png)
 
 <!--}-->
