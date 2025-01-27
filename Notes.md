@@ -3,6 +3,7 @@
 1. January 8: [TypeScript Fundamentals](#typescript-fundamentals)
 2. January 13: [TypeScript Fundamentals Continued](#typescript-fundamentals-continued)
 3. January 15: [React](#react)
+4. January 27: [UML](#uml)
 
 ## Typescript Fundamentals
 <!--{-->
@@ -163,6 +164,57 @@ function buildName(first: string, ...restOfName: string[]) {
         - `<Link to="/path">LinkName</Link>`
         - `<NavLink>` -> may add bolding to the links
         - Fun fact: don't use / and the path name will be appended, else it will create an entirely new link
+
+<!--}-->
+
+## UML
+<!--{-->
+
+- We do modeling to help us know what we are building
+- We do it too to help us understand and learn about an existing system
+- We can use them to document our system as well
+
+## Class diagrams
+
+- We have classes
+    - This doesn't have to be an actual class in the code, but could be just things that have the same functionality
+    - It looks like:
+        - A box with the name of the class at the top
+        - A section for attributes
+            - i.e. `- age: int` (private, name, type)
+            - We can have multiplicity (shown after the type)
+        - A section for methods
+            - i.e. `+ print()` (public, name(args))
+- We have objects:
+    - Same show as a Class, but we have an underline
+    - This is more for a sequence diagram actually...
+    - We can do `name: Class` if the object is part of a class
+- Relationships:
+    - We have associations:
+        - arrow from one class to another
+            - There is a descriptor above the arrow telling what the relation is (the arrow tells you from which object you can get to the other, may be unidirectional)
+            - The multiplicity is at either side of the arrow 
+                - i.e. a child has [1] mother, but a mother can have [*] children
+
+            - You can label the role at either end of the arrow to tell what the role of the object in that relationship is
+    - We can use diamonds:
+        - Hollow is an aggregation: 
+            - i.e. a Person is a subpart of a Company
+            - We can use a comb to put many thing in the one diamond
+        - Filled in is a composition:
+            - i.e. a Car is composed of Car parts
+            - The mulitplicity is always 1 on the part of the diamond
+            - Kind of implies that the one thing only exists to be part of the other
+    - Generalization/Specialization
+        - Arrow pointing from specialized version to generalized version with a hollow head
+    - Dependencies: these are good for design level
+        - Dotted line from the one to the other it is dependent on
+        - If you have shown an association, you're probably fine not to use this
+- You can have an association class
+    - It is a box, like a Class, that connects to the association line between the other classes
+
+- Here is a sequence diagram
+![Diagram](./diagrams/D1.png)
 
 <!--}-->
 

@@ -1,0 +1,29 @@
+@startuml
+
+actor User
+participant "FavoritesPlayer" as FP
+participant "MusicDatabase" as MD
+
+User -> FP: playFavorites()
+
+activate FP
+FP -> FP: playSongs(favorites)
+
+activate FP
+
+loop for favorite in favorites
+    FP -> MD: getSong(favorite)
+    activate MD
+    MD --> FP: Song
+    deactivate MD
+    FP -> FP: playSong(Song)
+    activate FP
+    deactivate FP
+end loop
+
+deactivate FP
+
+
+deactivate FP
+
+@enduml
