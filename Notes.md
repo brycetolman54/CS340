@@ -4,6 +4,7 @@
 2. January 13: [TypeScript Fundamentals Continued](#typescript-fundamentals-continued)
 3. January 15: [React](#react)
 4. January 27: [UML](#uml)
+5. January 29: [Architecture](#architecture)
 
 ## Typescript Fundamentals
 <!--{-->
@@ -216,6 +217,53 @@ function buildName(first: string, ...restOfName: string[]) {
 - Here is a sequence diagram
 
 ![Diagram](./diagrams/D1.png)
+
+<!--}-->
+
+## Architecture
+<!--{-->
+
+- <b>Software Architecture</b>: large scale organization into packages, subsystems, layers (can span multiple applications)
+- <b>Layer</b>: A rough grouping of classes, packages, or subsystems that share a responsibility for a significant piece of the system
+- <b>Package</b>: a group of classes or other software artifacts
+
+- What does the architecture define?
+    - The major subsystems (these themselves can be broken down into sub-subsystems)
+    - Responsibilities of the subsystems
+    - Dependencies between them
+    - Interface between them
+    - What the communication pattern is
+    - The technologies to implement them
+        - OS, language, UI, database, etc.
+    - The hardware of the system
+- Implementing the Architecture
+    - You can develop the subsystems in parallel
+        - This is where testing with Mockito and such it helpful
+    - You want the interfaces to be well defined
+        - Let the designers have as much freedom as possible
+        - Keep the ripple effect from being too large (or maybe there won't be change...)
+
+### Layered Architecture
+
+- This is one type of architecture (the one we will use in Tweeter), but just one type
+- The general idea
+    - There are higher layers that call on the lower levels
+    - The lower levels do not depend on the higher levels
+- There are two types:
+    - <b>Strict</b>: one layer can ONLY depend on the one below it
+        - Seen a lot in network communication
+    - <b>Relaxed</b>: a layer can depend on any of the ones below it
+        - Seen a lot in business applications
+
+- Implementation
+    - Determine the number of layers
+    - Name the layers and give them responsibilities
+    - Define the interface for each layer (so we know how they communicate)
+    - Error handling:
+        - Make sure the error returned is appropriate for the level it is at
+        - Don't let the low-level errors leak into the higher layers
+            - Transform the error at the layer it is first caught and turn it into something the layer above can understand and that is appropriate for its level of abstraction
+
 
 <!--}-->
 
