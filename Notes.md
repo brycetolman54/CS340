@@ -5,6 +5,7 @@
 3. January 15: [React](#react)
 4. January 27: [UML](#uml)
 5. January 29: [Architecture](#architecture)
+6. February 3: [Observer Pattern](#observer-pattern)
 
 ## Typescript Fundamentals
 <!--{-->
@@ -263,6 +264,29 @@ function buildName(first: string, ...restOfName: string[]) {
         - Make sure the error returned is appropriate for the level it is at
         - Don't let the low-level errors leak into the higher layers
             - Transform the error at the layer it is first caught and turn it into something the layer above can understand and that is appropriate for its level of abstraction
+
+
+<!--}-->
+
+## Observer Pattern
+<!--{-->
+
+- Abstract Subject: knows about the observer interface, but not the actual observer classes
+    - notify()
+    - register(Object)
+- Concrete Subject:
+    - setProp(prop)
+    - getProp()
+
+- <Interface> Observer:
+    - update()
+- Concrete Observer:
+    - update()
+
+- The interface is to give us functions we have to implement, making it so we can replace any type of concrete class to do those things
+    - There is no actual code implementation here
+- The abstract class is to have some functionality that we want in many classes but don't want to repeat it
+    - We have to inherit this abstract class
 
 
 <!--}-->
