@@ -8,7 +8,7 @@ interface ToastListener {
   ) => void;
   displayErrorMessage: (message: string, bootstrapClasses?: string) => void;
   clearLastInfoMessage: () => void;
-}
+} 
 
 const useToastListener = (): ToastListener => {
   const { displayInfoToast, displayErrorToast, deleteLastInfoToast } =
