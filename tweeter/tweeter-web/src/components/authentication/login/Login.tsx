@@ -13,8 +13,8 @@ interface Props {
 }
 
 const Login = (props: Props) => {
-  const [alias] = useState("");
-  const [password] = useState("");
+  const [alias, setAlias] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -70,7 +70,7 @@ const Login = (props: Props) => {
 
   const inputFieldGenerator = () => {
     return (
-      <AuthenticationFields callback={doLogin} />
+      <AuthenticationFields callback={doLogin} checkButton={checkSubmitButtonStatus} setAlias={setAlias} setPassword={setPassword}/>
     );
   };
 

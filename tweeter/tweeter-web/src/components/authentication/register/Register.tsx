@@ -12,8 +12,8 @@ import useUserInfo from "../../userInfo/UserInfoHook";
 const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [alias] = useState("");
-  const [password] = useState("");
+  const [alias, setAlias] = useState("");
+  const [password, setPassword] = useState("");
   const [imageBytes, setImageBytes] = useState<Uint8Array>(new Uint8Array());
   const [imageUrl, setImageUrl] = useState<string>("");
   const [imageFileExtension, setImageFileExtension] = useState<string>("");
@@ -155,7 +155,7 @@ const Register = () => {
           />
           <label htmlFor="lastNameInput">Last Name</label>
         </div>
-        <AuthenticationFields callback={doRegister} />
+        <AuthenticationFields callback={doRegister} checkButton={checkSubmitButtonStatus} setAlias={setAlias} setPassword={setPassword}/>
         <div className="form-floating mb-3">
           <input
             type="file"
