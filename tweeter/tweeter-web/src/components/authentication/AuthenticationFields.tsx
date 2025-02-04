@@ -1,13 +1,23 @@
 import { useState } from "react";
 
 interface Props {
-    callback: (event: React.KeyboardEvent<HTMLElement>) => void
+    callback: () => void
 }
 
 export const AuthenticationFields = (props: Props) => {
 
-  const [, setAlias] = useState("");
-  const [, setPassword] = useState("");
+  const [alias, setAlias] = useState("");
+  const [password, setPassword] = useState("");
+
+  const actOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key == "Enter" && !checkSubmitButtonStatus()) {
+      props.callback();
+    }
+  };
+
+  const checkSubmitButtonStatus = (): boolean => {
+    return !alias || !password;
+  };
 
     return (
       <>
@@ -18,7 +28,7 @@ export const AuthenticationFields = (props: Props) => {
             size={50}
             id="aliasInput"
             placeholder="name@example.com"
-            onKeyDown={props.callback}
+            onKeyDown={(event) => actOnEnter(event)}
             onChange={(event) => setAlias(event.target.value)}
           />
           <label htmlFor="aliasInput">Alias</label>
@@ -29,7 +39,7 @@ export const AuthenticationFields = (props: Props) => {
             className="form-control bottom"
             id="passwordInput"
             placeholder="Password"
-            onKeyDown={props.callback}
+            onKeyDown={(event) => actOnEnter(event)}
             onChange={(event) => setPassword(event.target.value)}
           />
           <label htmlFor="passwordInput">Password</label>

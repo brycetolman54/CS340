@@ -71,7 +71,7 @@ const Login = (props: Props) => {
 
   const inputFieldGenerator = () => {
     return (
-      <AuthenticationFields callback={loginOnEnter} />
+      <AuthenticationFields callback={doLogin} />
     );
   };
 
