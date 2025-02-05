@@ -301,6 +301,83 @@ function buildName(first: string, ...restOfName: string[]) {
     1. UI code should not be mixed with model code
     2. in the UI layer, separate display/output logic from input input processing logic
 
+### MVC
+
+1. View queries from Model
+2. View displays data
+3. View waits for user input
+4. View receives user input and passes it to Controller
+5. Controller
+    - Modifies data in Model
+    - Invokes algorithms in Model to update data
+    - Sets state of View
+        - Display messages to user
+        - Enable/disable UI components
+        - Set sort order of data
+        - Display "busy" feedback
+        - etc.
+6. Model notifies Observers (i.e. Views) that data has changed
+7. Views re-query data from Model
+8. View displays new data
+9. View waits for user input
+
+- The View: (dependent on Model)
+    - Talks to Controller
+    - Receives from Controller
+    - Talks to Model
+    - Receives from Model
+- The Controller:
+    - Talks to View
+    - Receives from View
+    - Talks to Model
+- The Model: (not dependent on View)
+    - Talks to View
+    - Receives from View
+    - Receives from Controller
+
+### MVP
+
+1. Presenters query data from Model
+2. Presenters push data into Views
+3. View displays data
+4. Views wait for user input
+5. View receives user input and passes to Presenter
+6. Presenter:
+    - Modifies data in Model
+    - Invokes algorithms in Model to update data
+    - Sets state of View
+        - Display messages to user
+        - Enable/disable UI components
+        - Set sort order of data
+        - Display "busy" feedback
+        - etc.
+7. Model notifies Observers (i.e. Presenters) that data has changed
+8. Presenters re-query data from Model
+9. Presenters push new data into Views
+10. Views display new data
+11. Views wait for user input
+
+- The View:
+    - Talks to Presenter
+    - Receives from Presenter
+- The Presenter: (dependent on Model)
+    - Talks to View
+    - Receives from View
+    - Talks to Model
+    - Receives from Model
+- The Model: (not dependent on Model)
+    - Talks to Presenter
+    - Receives from Presenter
+
+- The biggest difference is that the View no longer knows anything about the model
+    - This is a more layered type architecture
+- The presenter really acts like a mediator between the View and Model
+    - He sort of serves as the big boss that does everything
+
+### MVVM
+
+- This is for when the View wants to use less technical code, so it has methods and data in the code in funky ways
+
 <!--}-->
 
 ## Default
