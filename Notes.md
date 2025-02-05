@@ -6,6 +6,7 @@
 4. January 27: [UML](#uml)
 5. January 29: [Architecture](#architecture)
 6. February 3: [Observer Pattern](#observer-pattern)
+7. February 5: [MVC, MVP, MVVM](#mvc-mvp-mvvm)
 
 ## Typescript Fundamentals
 <!--{-->
@@ -288,6 +289,17 @@ function buildName(first: string, ...restOfName: string[]) {
 - The abstract class is to have some functionality that we want in many classes but don't want to repeat it
     - We have to inherit this abstract class
 
+
+<!--}-->
+
+## MVC, MVP, MVVM
+<!--{-->
+
+- These are a family of models that are well related
+- They have to do with the way in which the user interface interacts with the lower levels
+- There are two guiding principles:
+    1. UI code should not be mixed with model code
+    2. in the UI layer, separate display/output logic from input input processing logic
 
 <!--}-->
 

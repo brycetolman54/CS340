@@ -1,22 +1,14 @@
 import { useState } from "react";
 
 interface Props {
-    callback: () => void,
-    checkButton: () => boolean,
+    callback: (event: React.KeyboardEvent<HTMLElement>) => void,
     setAlias: (alias: string) => void,
     setPassword: (alias: string) => void
 }
 
 export const AuthenticationFields = (props: Props) => {
 
-  const actOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.key == "Enter" && !props.checkButton()) {
-      props.callback();
-    }
-  };
-
-
-    return (
+  return (
       <>
         <div className="form-floating">
           <input
@@ -25,7 +17,7 @@ export const AuthenticationFields = (props: Props) => {
             size={50}
             id="aliasInput"
             placeholder="name@example.com"
-            onKeyDown={(event) => actOnEnter(event)}
+            onKeyDown={(event) => props.callback(event)}
             onChange={(event) => props.setAlias(event.target.value)}
           />
           <label htmlFor="aliasInput">Alias</label>
@@ -36,7 +28,7 @@ export const AuthenticationFields = (props: Props) => {
             className="form-control bottom"
             id="passwordInput"
             placeholder="Password"
-            onKeyDown={(event) => actOnEnter(event)}
+            onKeyDown={(event) => props.callback(event)}
             onChange={(event) => props.setPassword(event.target.value)}
           />
           <label htmlFor="passwordInput">Password</label>
