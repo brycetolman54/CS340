@@ -8,7 +8,7 @@ import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenticationFields from "../AuthenticationFields";
 import useUserInfo from "../../userInfo/UserInfoHook";
 
-interface Props { 
+interface Props {
   originalUrl?: string;
 }
 
@@ -70,7 +70,11 @@ const Login = (props: Props) => {
 
   const inputFieldGenerator = () => {
     return (
-      <AuthenticationFields callback={loginOnEnter} setAlias={setAlias} setPassword={setPassword}/>
+      <AuthenticationFields
+        callback={loginOnEnter}
+        setAlias={setAlias}
+        setPassword={setPassword}
+      />
     );
   };
 
