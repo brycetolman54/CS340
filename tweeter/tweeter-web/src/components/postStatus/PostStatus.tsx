@@ -18,7 +18,6 @@ const PostStatus = () => {
         displayErrorMessage: displayErrorMessage,
         displayInfoMessage: displayInfoMessage,
         clearLastInfoMessage: clearLastInfoMessage,
-        setPost: setPost,
     };
 
     const [presenter] = useState(new PostStatusPresenter(listener));
@@ -27,18 +26,18 @@ const PostStatus = () => {
         event.preventDefault();
 
         presenter.submitPost(post, currentUser!, authToken!);
+
+        setPost("");
     };
 
     const clearPost = (event: React.MouseEvent) => {
         event.preventDefault();
         setPost("");
     };
-    // Do I really need to move this to the presenter?
 
     const checkButtonStatus: () => boolean = () => {
         return !post.trim() || !authToken || !currentUser;
     };
-    // Do I really need to move this to the presenter?
 
     return (
         <div className={presenter.isLoading ? "loading" : ""}>

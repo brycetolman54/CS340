@@ -7,6 +7,8 @@
 - Find my Image Editor [here](./image-editor)
 - Find my tweeter [here](./tweeter/tweeter-web)
 
-# Diagrams
+# Exercises
 
-- Find my diagrams [here](./diagrams)
+- Find my diagrams [here](./exercises/diagrams)
+- [Observer exercise](./exercises/obererver-starter-code)
+- [Template exercise](./exercises/template-starter-code)
