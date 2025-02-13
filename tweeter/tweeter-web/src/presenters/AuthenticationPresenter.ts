@@ -9,6 +9,9 @@ export interface AuthenticationView {
         rememberMe: boolean
     ) => void;
     displayErrorMessage: (message: string) => void;
+    setImageUrl?: (url: string) => void;
+    setImageBytes?: (bytes: Uint8Array) => void;
+    setImageFileExtension?: (extension: string) => void;
 }
 
 export class AuthenticationPresenter {

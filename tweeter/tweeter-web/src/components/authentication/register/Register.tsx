@@ -6,10 +6,7 @@ import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenticationFields from "../AuthenticationFields";
 import useUserInfo from "../../userInfo/UserInfoHook";
-import {
-    RegisterPresenter,
-    RegisterView,
-} from "../../../presenters/RegisterPresenter";
+import { RegisterPresenter } from "../../../presenters/RegisterPresenter";
 import { AuthenticationView } from "../../../presenters/AuthenticationPresenter";
 
 const Register = () => {
@@ -119,17 +116,12 @@ const Register = () => {
         navigate: navigate,
         updateUserInfo: updateUserInfo,
         displayErrorMessage: displayErrorMessage,
-    };
-
-    const registerListener: RegisterView = {
         setImageUrl: setImageUrl,
         setImageBytes: setImageBytes,
         setImageFileExtension: setImageFileExtension,
     };
 
-    const [presenter] = useState(
-        new RegisterPresenter(listener, registerListener)
-    );
+    const [presenter] = useState(new RegisterPresenter(listener));
 
     return (
         <AuthenticationFormLayout

@@ -5,19 +5,11 @@ import {
     AuthenticationView,
 } from "./AuthenticationPresenter";
 
-export interface RegisterView {
-    setImageUrl: (url: string) => void;
-    setImageBytes: (bytes: Uint8Array) => void;
-    setImageFileExtension: (extension: string) => void;
-}
-
 export class RegisterPresenter extends AuthenticationPresenter {
     private userService: UserService;
-    private registerView;
 
-    public constructor(view: AuthenticationView, registerView: RegisterView) {
+    public constructor(view: AuthenticationView) {
         super(view);
-        this.registerView = registerView;
         this.userService = new UserService();
     }
 
@@ -55,7 +47,7 @@ export class RegisterPresenter extends AuthenticationPresenter {
 
     public handleImageFile(file: File | undefined) {
         if (file) {
-            this.registerView.setImageUrl(URL.createObjectURL(file));
+            this.view.setImageUrl?.(URL.createObjectURL(file));
 
             const reader = new FileReader();
             reader.onload = (event: ProgressEvent<FileReader>) => {
@@ -70,18 +62,18 @@ export class RegisterPresenter extends AuthenticationPresenter {
                     "base64"
                 );
 
-                this.registerView.setImageBytes(bytes);
+                this.view.setImageBytes?.(bytes);
             };
             reader.readAsDataURL(file);
 
             // Set image file extension (and move to a separate method)
             const fileExtension = this.getFileExtension(file);
             if (fileExtension) {
-                this.registerView.setImageFileExtension(fileExtension);
+                this.view.setImageFileExtension?.(fileExtension);
             }
         } else {
-            this.registerView.setImageUrl("");
-            this.registerView.setImageBytes(new Uint8Array());
+            this.view.setImageUrl?.("");
+            this.view.setImageBytes?.(new Uint8Array());
         }
     }
 
