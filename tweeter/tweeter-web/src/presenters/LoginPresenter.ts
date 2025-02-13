@@ -1,25 +1,14 @@
-import { User, AuthToken } from "tweeter-shared";
 import { UserService } from "../model/UserService";
+import {
+    AuthenticationPresenter,
+    AuthenticationView,
+} from "./AuthenticationPresenter";
 
-export interface LoginView {
-    navigate: (path: string) => void;
-    updateUserInfo: (
-        user1: User,
-        user2: User,
-        authToken: AuthToken,
-        rememberMe: boolean
-    ) => void;
-    displayErrorMessage: (message: string) => void;
-}
-
-export class LoginPresenter {
-    private view: LoginView;
+export class LoginPresenter extends AuthenticationPresenter {
     private userService: UserService;
 
-    private _isLoading = false;
-
-    public constructor(view: LoginView) {
-        this.view = view;
+    public constructor(view: AuthenticationView) {
+        super(view);
         this.userService = new UserService();
     }
 
@@ -30,7 +19,7 @@ export class LoginPresenter {
         originalUrl: string | undefined
     ) {
         try {
-            this._isLoading = true;
+            this.isLoading = true;
 
             const [user, authToken] = await this.userService.login(
                 alias,
@@ -49,11 +38,7 @@ export class LoginPresenter {
                 `Failed to log user in because of exception: ${error}`
             );
         } finally {
-            this._isLoading = false;
+            this.isLoading = false;
         }
-    }
-
-    public get isLoading() {
-        return this._isLoading;
     }
 }
