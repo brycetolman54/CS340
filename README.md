@@ -12,3 +12,4 @@
 - Find my diagrams [here](./exercises/diagrams)
 - [Observer exercise](./exercises/obererver-starter-code)
 - [Template exercise](./exercises/template-starter-code)
+- [Generics Exercise](./exercises/generics-starter-code)
