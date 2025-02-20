@@ -7,12 +7,20 @@ export interface MessageView extends View {
     displayInfoMessage: (message: string, time: number) => void;
 }
 
-export abstract class Presenter<V extends View> {
+export abstract class Presenter<S, V extends View> {
     private _view: V;
+    private _service: S;
 
     protected constructor(view: V) {
         this._view = view;
+        this._service = this.createService();
     }
+
+    protected get service(): S {
+        return this._service;
+    }
+
+    protected abstract createService(): S;
 
     protected get view(): V {
         return this._view;
@@ -20,18 +28,17 @@ export abstract class Presenter<V extends View> {
 
     protected async doFailureReportingOperation(
         tryOperation: () => Promise<void>,
+        operationDescription: string,
         finalOperation: () => void = () => {}
     ): Promise<void> {
         try {
             await tryOperation();
         } catch (error) {
             this.view.displayErrorMessage(
-                `Failed to ${this.getOperationDescription()} because of exeception: ${error}`
+                `Failed to ${operationDescription} because of exeception: ${error}`
             );
         } finally {
             finalOperation();
         }
     }
-
-    protected abstract getOperationDescription(): string;
 }

@@ -1,5 +1,6 @@
 import { User, AuthToken } from "tweeter-shared";
 import { AuthenticationPresenter } from "./AuthenticationPresenter";
+import { UserService } from "../model/UserService";
 
 export class LoginPresenter extends AuthenticationPresenter {
     protected authenticate(
@@ -19,5 +20,9 @@ export class LoginPresenter extends AuthenticationPresenter {
 
     protected getOperationDescription(): string {
         return "log user in";
+    }
+
+    protected createService(): UserService {
+        return new UserService();
     }
 }

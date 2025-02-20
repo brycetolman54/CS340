@@ -15,18 +15,14 @@ export interface AuthenticationView extends View {
     setImageFileExtension?: (extension: string) => void;
 }
 
-export abstract class AuthenticationPresenter extends Presenter<AuthenticationView> {
+export abstract class AuthenticationPresenter extends Presenter<
+    UserService,
+    AuthenticationView
+> {
     private _isLoading = false;
-
-    private _service: UserService;
 
     public constructor(view: AuthenticationView) {
         super(view);
-        this._service = new UserService();
-    }
-
-    protected get service(): UserService {
-        return this._service;
     }
 
     public get isLoading() {
@@ -64,6 +60,7 @@ export abstract class AuthenticationPresenter extends Presenter<AuthenticationVi
 
                 this.navigate(originalUrl);
             },
+            this.getOperationDescription(),
             () => {
                 this.isLoading = false;
             }
@@ -80,4 +77,10 @@ export abstract class AuthenticationPresenter extends Presenter<AuthenticationVi
     ): Promise<[User, AuthToken]>;
 
     protected abstract navigate(originalUrl: string | undefined): void;
+
+    protected abstract getOperationDescription(): string;
+
+    protected createService(): UserService {
+        return new UserService();
+    }
 }

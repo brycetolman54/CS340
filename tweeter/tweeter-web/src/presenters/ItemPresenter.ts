@@ -7,19 +7,12 @@ export interface ItemView<T> extends View {
     addItems: (items: T[]) => void;
 }
 
-export abstract class ItemPresenter<T, U> extends Presenter<ItemView<T>> {
+export abstract class ItemPresenter<T, S> extends Presenter<S, ItemView<T>> {
     private _hasMoreItems: boolean = true;
     private _lastItem: T | null = null;
 
-    private _service: U;
-
     public constructor(view: ItemView<T>) {
         super(view);
-        this._service = this.createService();
-    }
-
-    protected get service(): U {
-        return this._service;
     }
 
     protected get lastItem(): T | null {
@@ -53,7 +46,7 @@ export abstract class ItemPresenter<T, U> extends Presenter<ItemView<T>> {
             this.hasMoreItems = hasMore;
             this.lastItem = newItems[newItems.length - 1];
             this.view.addItems(newItems);
-        });
+        }, this.getOperationDescription());
     }
 
     protected abstract getMoreItems(
@@ -61,5 +54,5 @@ export abstract class ItemPresenter<T, U> extends Presenter<ItemView<T>> {
         userAlias: string
     ): Promise<[T[], boolean]>;
 
-    protected abstract createService(): U;
+    protected abstract getOperationDescription(): string;
 }
