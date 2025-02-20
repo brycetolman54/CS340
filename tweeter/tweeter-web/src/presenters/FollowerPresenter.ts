@@ -15,7 +15,7 @@ export class FollowerPresenter extends UserItemPresenter {
         );
     }
 
-    protected getItemDescription(): string {
+    protected getOperationDescription(): string {
         return "load followers";
     }
 }

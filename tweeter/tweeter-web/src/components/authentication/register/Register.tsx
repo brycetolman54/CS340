@@ -101,14 +101,15 @@ const Register = () => {
     };
 
     const doRegister = async () => {
-        presenter.doRegister(
-            firstName!,
-            lastName!,
+        presenter.doAuthentication(
             alias!,
             password!,
+            rememberMe,
+            undefined,
+            firstName!,
+            lastName!,
             imageBytes!,
-            imageFileExtension!,
-            rememberMe
+            imageFileExtension!
         );
     };
 

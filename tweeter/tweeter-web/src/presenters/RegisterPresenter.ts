@@ -1,48 +1,28 @@
 import { Buffer } from "buffer";
-import { UserService } from "../model/UserService";
-import {
-    AuthenticationPresenter,
-    AuthenticationView,
-} from "./AuthenticationPresenter";
+import { AuthenticationPresenter } from "./AuthenticationPresenter";
+import { User, AuthToken } from "tweeter-shared";
 
 export class RegisterPresenter extends AuthenticationPresenter {
-    private userService: UserService;
-
-    public constructor(view: AuthenticationView) {
-        super(view);
-        this.userService = new UserService();
-    }
-
-    public async doRegister(
-        firstName: string,
-        lastName: string,
+    protected authenticate(
         alias: string,
         password: string,
+        firstName: string,
+        lastName: string,
         imageBytes: Uint8Array,
-        imageFileExtension: string,
-        rememberMe: boolean
-    ) {
-        try {
-            this.isLoading = true;
+        imageFileExtension: string
+    ): Promise<[User, AuthToken]> {
+        return this.service.register(
+            firstName,
+            lastName,
+            alias,
+            password,
+            imageBytes,
+            imageFileExtension
+        );
+    }
 
-            const [user, authToken] = await this.userService.register(
-                firstName,
-                lastName,
-                alias,
-                password,
-                imageBytes,
-                imageFileExtension
-            );
-
-            this.view.updateUserInfo(user, user, authToken, rememberMe);
-            this.view.navigate("/");
-        } catch (error) {
-            this.view.displayErrorMessage(
-                `Failed to register user because of exception: ${error}`
-            );
-        } finally {
-            this.isLoading = false;
-        }
+    protected navigate(originalUrl: string | undefined): void {
+        this.view.navigate("/");
     }
 
     public handleImageFile(file: File | undefined) {
@@ -80,4 +60,8 @@ export class RegisterPresenter extends AuthenticationPresenter {
     getFileExtension = (file: File): string | undefined => {
         return file.name.split(".").pop();
     };
+
+    protected getOperationDescription(): string {
+        return "register user";
+    }
 }

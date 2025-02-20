@@ -53,15 +53,13 @@ export abstract class ItemPresenter<T, U> extends Presenter<ItemView<T>> {
             this.hasMoreItems = hasMore;
             this.lastItem = newItems[newItems.length - 1];
             this.view.addItems(newItems);
-        }, this.getItemDescription());
+        });
     }
 
     protected abstract getMoreItems(
         authToken: AuthToken,
         userAlias: string
     ): Promise<[T[], boolean]>;
-
-    protected abstract getItemDescription(): string;
 
     protected abstract createService(): U;
 }

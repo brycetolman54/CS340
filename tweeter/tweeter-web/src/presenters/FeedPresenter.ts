@@ -15,7 +15,7 @@ export class FeedPresenter extends StatusItemPresenter {
         );
     }
 
-    protected getItemDescription(): string {
+    protected getOperationDescription(): string {
         return "load feed items";
     }
 }

@@ -7,7 +7,7 @@ export interface MessageView extends View {
     displayInfoMessage: (message: string, time: number) => void;
 }
 
-export class Presenter<V extends View> {
+export abstract class Presenter<V extends View> {
     private _view: V;
 
     protected constructor(view: V) {
@@ -19,15 +19,19 @@ export class Presenter<V extends View> {
     }
 
     protected async doFailureReportingOperation(
-        operation: () => Promise<void>,
-        operationDescription: string
+        tryOperation: () => Promise<void>,
+        finalOperation: () => void = () => {}
     ): Promise<void> {
         try {
-            await operation();
+            await tryOperation();
         } catch (error) {
             this.view.displayErrorMessage(
-                `Failed to ${operationDescription} because of execpetion: ${error}`
+                `Failed to ${this.getOperationDescription()} because of exeception: ${error}`
             );
+        } finally {
+            finalOperation();
         }
     }
+
+    protected abstract getOperationDescription(): string;
 }
