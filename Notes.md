@@ -7,6 +7,7 @@
 5. January 29: [Architecture](#architecture)
 6. February 3: [Observer Pattern](#observer-pattern)
 7. February 5: [MVC, MVP, MVVM](#mvc-mvp-mvvm)
+8. February 24: [Testing](#testing)
 
 ## Typescript Fundamentals
 <!--{-->
@@ -380,12 +381,57 @@ function buildName(first: string, ...restOfName: string[]) {
 
 <!--}-->
 
-## Default
+## Testing
 <!--{-->
 
-- 
+### Talking about Jest
+
+- Jest is a testing platform that we can use
+- It has matchers to see if your program is outputting the correct thing
+- You can use `.not` to negate matchers
+- You can use `describe` to block code together (it takes a string and then a lambda)
+- There is a `beforeall` and an `afterAll`, as in other frameworks
+- We also have `beforeEach` and `afterEach`
+    - These last two points can be put into a `describe` block in order to apply only to that block
+- We can do parameterized tests with `.each`
+    - We can do this with either a `test` (he can also be called `it` to make it more readable) or a `describe`
+
+
+### Talking about mocking and spying
+
+- What do Mock objects do?
+    - Nothing
+    - Validate the method inputs
+    - Validate the call sequence
+    - Send a message to a log
+    - Return hard coded answers
+    - Select and answer from a hard-coded pool
+    - Randomly generate an answer
+    - Prompt the user for the answer
+    - Pause for a while to simulate the time taken
+    - Generate errors that are hard to produce for real
+- The mock object implements the public interface of the thing that it is mocking
+- A spy object wraps a real object
+    - Its default methods are those of the object it is wrapping
+- We can use `mock(Object)` to mock an object (used to verify)
+    - Then we use `instance(Mock)` in order to get an instance to actually use
+        - We use this as though it is the real object, as would use it in our code
+- If we want the mock object to do something, to stub the method calls, we have to do so before we make the instance (do it on the mock object)
+- We can use capture to grab the args from a function call
+
+- If we want to spy on an object, we use `spy()`
+- We then create an instance with `instance()`
+
+
+### React component testing
+
+- We need to test that:
+    - We are rendering the right content
+    - Updates its state correctly
+    - Fires its event correctly
 
 <!--}-->
+
 
 
 
