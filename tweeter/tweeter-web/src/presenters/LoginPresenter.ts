@@ -3,7 +3,7 @@ import { AuthenticationPresenter } from "./AuthenticationPresenter";
 import { UserService } from "../model/UserService";
 
 export class LoginPresenter extends AuthenticationPresenter {
-    protected authenticate(
+    public authenticate(
         alias: string,
         password: string
     ): Promise<[User, AuthToken]> {

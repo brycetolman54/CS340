@@ -33,3 +33,5 @@ tweeter/yarn-debug.log*
 tweeter/yarn-error.log*
 
 tweeter/dist
+
+.aws.csv
