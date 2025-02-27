@@ -59,7 +59,6 @@ describe("PostStatusPresenter", () => {
         await postStatusPresenter.submitPost(post, user, authToken);
 
         verify(mockStatusService.postStatus(anything(), anything())).once();
-        verify(mockPostStatusView.clearLastInfoMessage()).once();
         verify(mockPostStatusView.setPostEmpty()).once();
         verify(
             mockPostStatusView.displayInfoMessage("Posting status...", 0)
@@ -67,6 +66,7 @@ describe("PostStatusPresenter", () => {
         verify(
             mockPostStatusView.displayInfoMessage("Status posted!", 2000)
         ).once();
+        verify(mockPostStatusView.clearLastInfoMessage()).once();
     });
 
     it("tells the view to display an error message and clear the last info message and does not tell it to clear the post or display a status posted message when post is unsuccessful", async () => {

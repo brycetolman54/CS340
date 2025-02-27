@@ -29,9 +29,9 @@ export class PostStatusPresenter extends Presenter<
 
                 await this.service.postStatus(authToken, status);
 
-                this.view.displayInfoMessage("Status posted!", 2000);
-
                 this.view.setPostEmpty();
+
+                this.view.displayInfoMessage("Status posted!", 2000);
             },
             "post the status",
             () => {
