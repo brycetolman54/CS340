@@ -2,10 +2,16 @@ import { AuthToken, Status, User } from "tweeter-shared";
 import { StatusService } from "../model/StatusService";
 import { MessageView, Presenter } from "./Presenter";
 
-export class PostStatusPresenter extends Presenter<StatusService, MessageView> {
+export interface PostStatusView extends MessageView {
+    setPostEmpty: () => void;
+}
+export class PostStatusPresenter extends Presenter<
+    StatusService,
+    PostStatusView
+> {
     private _isLoading: boolean = false;
 
-    public constructor(view: MessageView) {
+    public constructor(view: PostStatusView) {
         super(view);
     }
 
@@ -24,6 +30,8 @@ export class PostStatusPresenter extends Presenter<StatusService, MessageView> {
                 await this.service.postStatus(authToken, status);
 
                 this.view.displayInfoMessage("Status posted!", 2000);
+
+                this.view.setPostEmpty();
             },
             "post the status",
             () => {

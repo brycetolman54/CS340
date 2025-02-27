@@ -2,30 +2,37 @@ import "./PostStatus.css";
 import { useState } from "react";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "../userInfo/UserInfoHook";
-import { PostStatusPresenter } from "../../presenters/PostStatusPresenter";
-import { MessageView } from "../../presenters/Presenter";
+import {
+    PostStatusPresenter,
+    PostStatusView,
+} from "../../presenters/PostStatusPresenter";
 
-const PostStatus = () => {
+interface Props {
+    presenter?: PostStatusPresenter;
+}
+
+const PostStatus = (props: Props) => {
     const { displayErrorMessage, displayInfoMessage, clearLastInfoMessage } =
         useToastListener();
 
     const { currentUser, authToken } = useUserInfo();
     const [post, setPost] = useState("");
 
-    const listener: MessageView = {
+    const listener: PostStatusView = {
         displayErrorMessage: displayErrorMessage,
         displayInfoMessage: displayInfoMessage,
         clearLastInfoMessage: clearLastInfoMessage,
+        setPostEmpty: () => setPost(""),
     };
 
-    const [presenter] = useState(new PostStatusPresenter(listener));
+    const [presenter] = useState(
+        props.presenter ?? new PostStatusPresenter(listener)
+    );
 
     const submitPost = async (event: React.MouseEvent) => {
         event.preventDefault();
 
         presenter.submitPost(post, currentUser!, authToken!);
-
-        setPost("");
     };
 
     const clearPost = (event: React.MouseEvent) => {
@@ -44,6 +51,7 @@ const PostStatus = () => {
                     <textarea
                         className="form-control"
                         id="postStatusTextArea"
+                        aria-label="postText"
                         rows={10}
                         placeholder="What's on your mind?"
                         value={post}

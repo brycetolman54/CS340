@@ -2,12 +2,12 @@ import { MemoryRouter } from "react-router-dom";
 import Login from "../../../../src/components/authentication/login/Login";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import userEvent, { UserEvent } from "@testing-library/user-event";
+import { userEvent, UserEvent } from "@testing-library/user-event";
 import React from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { LoginPresenter } from "../../../../src/presenters/LoginPresenter";
-import { mock, instance, verify } from "@typestrong/ts-mockito";
+import { mock, instance, verify, when } from "@typestrong/ts-mockito";
 
 library.add(fab);
 
@@ -47,17 +47,21 @@ describe("Login Component", () => {
         const mockPresenter = mock<LoginPresenter>();
         const mockPresenterInstance = instance(mockPresenter);
 
+        when(mockPresenter.isLoading).thenReturn(false);
+
         const originalUrl = "https://google.com";
         const alias = "afdfs";
         const password = "fdhfkd";
         const { signInButton, aliasField, passwordField, user } =
             renderLoginAndGetElements(originalUrl, mockPresenterInstance);
 
-        //     await typeInFields(user, aliasField, passwordField, alias, password);
+        await typeInFields(user, aliasField, passwordField, alias, password);
 
-        //     await user.click(signInButton);
+        await user.click(signInButton);
 
-        //     verify(mockPresenter.authenticate(alias, password)).once();
+        verify(
+            mockPresenter.doAuthentication(alias, password, false, originalUrl)
+        ).once();
     });
 });
 

@@ -56,7 +56,7 @@ describe("AppNavbarPresenter", () => {
 
         verify(mockAppNavbarView.clearLastInfoMessage()).once();
         verify(mockAppNavbarView.clearUserInfo()).once();
-        verify(mockAppNavbarView.displayErrorMessage(anything())).never;
+        verify(mockAppNavbarView.displayErrorMessage(anything())).never();
     });
 
     it("tells the view to display an error message and does not tell it to clear the last info message or clear the user info when logout is unsucessful", async () => {
