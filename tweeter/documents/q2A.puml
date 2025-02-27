@@ -1,0 +1,19 @@
+@startuml
+
+class FeedPresenter {
+    +loadMoreFeedItems()
+}
+
+class StoryPresenter {
+    +loadMoreStoryItems()
+}
+
+class FollowerPresenter {
+    +loadMoreFollowers()
+}
+
+class FolloweePresenter {
+    +loadMoreFollowees()
+}
+
+@enduml

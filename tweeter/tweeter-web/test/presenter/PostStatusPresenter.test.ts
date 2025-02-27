@@ -58,6 +58,7 @@ describe("PostStatusPresenter", () => {
     it("tells the view to clear the last info message, clear the post, and display a status posted message when post is successful", async () => {
         await postStatusPresenter.submitPost(post, user, authToken);
 
+        verify(mockStatusService.postStatus(anything(), anything())).once();
         verify(mockPostStatusView.clearLastInfoMessage()).once();
         verify(mockPostStatusView.setPostEmpty()).once();
         verify(

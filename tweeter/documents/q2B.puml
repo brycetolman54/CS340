@@ -1,0 +1,30 @@
+@startuml
+
+class ItemPresenter {
+    {abstract}
+    +loadMoreItems()
+    #{abstract} getMoreItems()
+}
+
+class FeedPresenter {
+    #getMoreItems()
+}
+
+class StoryPresenter {
+    #getMoreItems()
+}
+
+class FollowerPresenter {
+    #getMoreItems()
+}
+
+class FolloweePresenter {
+    #getMoreItems()
+}
+
+ItemPresenter <|-- FeedPresenter
+ItemPresenter <|-- StoryPresenter
+ItemPresenter <|-- FollowerPresenter
+ItemPresenter <|-- FolloweePresenter
+
+@enduml

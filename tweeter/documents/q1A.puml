@@ -1,0 +1,27 @@
+@startuml
+
+class UserService {
+    +<<async>>login(alias, password)
+}
+
+interface LoginView {
+    +updateUserInfo(user, authToken)
+}
+
+class LoginPresenter {
+    +authenticate(alias, password)
+}
+
+class Login {
+    +updateUserInfo(user, authoken)
+}
+
+LoginView <|.. Login
+
+LoginPresenter *-- LoginView
+
+Login *-- "1" LoginPresenter
+
+LoginPresenter *-- "1" UserService
+
+@enduml

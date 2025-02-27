@@ -1,0 +1,15 @@
+@startuml
+
+actor User
+participant "Login" as L
+participant "LoginPresenter" as LP
+participant "UserService" as US
+
+User -> L: login()
+L -> LP: doLogin(alias, password)
+LP -> US: login(alias, password)
+US --> LP: user, authToken
+LP -> L: updateUserInfo(user, authToken)
+L -> L: updateUserInfo()
+
+@enduml
