@@ -15,3 +15,4 @@
 - [Generics Exercise](./exercises/generics-starter-code)
 - [Design Principles Exercises](./exercises/design-principles-starter-code)
 - [Testing with Mockito Exercise](./exercises/mock-start-code)
+- [Lambda Functions Exercise](./exercises/lambda-starter-code)
