@@ -1,0 +1,7 @@
+{
+    "to": "bat.2000@live.com",
+    "from": "brycealantolman@gmail.com",
+    "subject": "MY SUBJECT",
+    "textBody": "YOU PICKLE",
+    "htmlBody": "<h1>YOU pickell</h1>"
+}
