@@ -4,9 +4,11 @@ import {
     GetCommand,
     PutCommand,
     UpdateCommand,
+    QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { Follow } from "../entity/Follow";
+import { DataPage } from "../entity/DataPage";
 
 export class FollowDAO {
     readonly tableName = "follows";
@@ -83,5 +85,90 @@ export class FollowDAO {
             [this.followerKey]: follow.follower_handle,
             [this.followeeKey]: follow.followee_handle,
         };
+    }
+
+    // get paged followees
+    async getPageOfFollowees(
+        followerHandle: string,
+        lastFolloweeHandle: string | undefined = undefined,
+        pageSize: number = 5
+    ): Promise<DataPage<Follow>> {
+        const params = {
+            KeyConditionExpression: "#v = :v",
+            ExpressionAttributeNames: {
+                "#v": this.followerKey,
+            },
+            ExpressionAttributeValues: {
+                ":v": followerHandle,
+            },
+            TableName: this.tableName,
+            Limit: pageSize,
+            ExclusiveStartKey:
+                lastFolloweeHandle === undefined
+                    ? undefined
+                    : {
+                          [this.followerKey]: followerHandle,
+                          [this.followeeKey]: lastFolloweeHandle,
+                      },
+        };
+
+        const items: Follow[] = [];
+        const data = await this.client.send(new QueryCommand(params));
+        const hasMorePages = data.LastEvaluatedKey !== undefined;
+        data.Items?.forEach((item) =>
+            items.push(
+                new Follow(
+                    item[this.followerKey],
+                    item[this.followerAttr],
+                    item[this.followeeKey],
+                    item[this.followeeAttr]
+                )
+            )
+        );
+
+        return new DataPage<Follow>(items, hasMorePages);
+    }
+
+    // get paged followers
+    async getPageOfFollowers(
+        followeeHandle: string,
+        lastFollowerHandle: string | undefined = undefined,
+        pageSize: number = 5
+    ): Promise<DataPage<Follow>> {
+        const params = {
+            KeyConditionExpression: "#v = :v",
+            ExpressionAttributeNames: {
+                "#v": this.followeeKey,
+            },
+            ExpressionAttributeValues: {
+                ":v": followeeHandle,
+            },
+            TableName: this.tableName,
+            IndexName: this.indexName,
+            Limit: pageSize,
+            ExclusiveStartKey:
+                lastFollowerHandle === undefined
+                    ? undefined
+                    : {
+                          [this.followerKey]: lastFollowerHandle,
+                          [this.followeeKey]: followeeHandle,
+                      },
+        };
+
+        const items: Follow[] = [];
+        const data = await this.client.send(new QueryCommand(params));
+        const hasMorePages = data.LastEvaluatedKey !== undefined;
+        data.Items?.forEach((item) =>
+            items.push(
+                new Follow(
+                    item[this.followerKey],
+                    item[this.followerAttr],
+                    item[this.followeeKey],
+                    item[this.followeeAttr]
+                )
+            )
+        );
+
+        return new DataPage<Follow>(items, hasMorePages);
     }
 }

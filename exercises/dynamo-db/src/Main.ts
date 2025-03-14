@@ -1,5 +1,6 @@
 import { Follow } from "./entity/Follow";
 import { FollowDAO } from "./dao/FollowDAO";
+import { DataPage } from "./entity/DataPage";
 
 class OldMain {
     async run() {
@@ -104,7 +105,7 @@ class Main {
         ];
 
         // put 25 followers (same followee)
-        console.log("Posting 25 Followers:");
+        console.log("Posting 25 Followers:\n");
         followers.forEach(async (follower) => {
             await followDAO.putFollow(
                 new Follow("@" + follower, follower, "@tolman", "tolman")
@@ -112,7 +113,7 @@ class Main {
         });
 
         // put 25 followees (same follower)
-        console.log("Posting 25 Followees:");
+        console.log("Posting 25 Followees:\n");
         followees.forEach(async (followee) => {
             await followDAO.putFollow(
                 new Follow("@bryce", "bryce", "@" + followee, followee)
@@ -150,6 +151,53 @@ class Main {
         } else {
             console.log("  Got: undefined\n");
         }
+
+        // get 2 pages of followees
+        console.log("Getting Followees: ");
+        let page: DataPage<Follow> = await followDAO.getPageOfFollowees(
+            "@bryce"
+        );
+        let followeesPaged: Follow[] = page.values;
+        console.log("  Page 1:");
+        followeesPaged.forEach((f) => {
+            console.log("    " + f.toString());
+        });
+        console.log("  More Pages? ", page.hasMorePages, "\n");
+
+        const lastFolloweeHandle =
+            followeesPaged[followeesPaged.length - 1].followee_handle;
+
+        page = await followDAO.getPageOfFollowees("@bryce", lastFolloweeHandle);
+        followeesPaged = page.values;
+        console.log("  Page 2:");
+        followeesPaged.forEach((f) => {
+            console.log("    " + f.toString());
+        });
+        console.log("  More Pages? ", page.hasMorePages, "\n");
+
+        // get 2 pages of followers
+        console.log("Getting Followers: ");
+        page = await followDAO.getPageOfFollowers("@tolman");
+        let followersPaged: Follow[] = page.values;
+        console.log("  Page 1:");
+        followersPaged.forEach((f) => {
+            console.log("    " + f.toString());
+        });
+        console.log("  More Pages? ", page.hasMorePages, "\n");
+
+        const lastFollowerHandle =
+            followersPaged[followersPaged.length - 1].follower_handle;
+
+        page = await followDAO.getPageOfFollowers(
+            "@tolman",
+            lastFollowerHandle
+        );
+        followersPaged = page.values;
+        console.log("Page 2:");
+        followersPaged.forEach((f) => {
+            console.log("    " + f.toString());
+        });
+        console.log("  More Pages? ", page.hasMorePages, "\n");
     }
 }
 
