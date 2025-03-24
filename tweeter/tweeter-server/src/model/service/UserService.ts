@@ -1,6 +1,6 @@
 import { FakeData, UserDto, AuthTokenDto, User } from "tweeter-shared";
-import { followerHandler } from "../../lambda/follow/GetFollowerCount";
-import { followeeHandler } from "../../lambda/follow/GetFolloweeCount";
+import { followerHandler } from "../../lambda/follow/GetFollowerCountLambda";
+import { followeeHandler } from "../../lambda/follow/GetFolloweeCountLambda";
 
 export class UserService {
     public async getUser(
