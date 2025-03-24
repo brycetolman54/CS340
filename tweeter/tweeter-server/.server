@@ -3,5 +3,8 @@ LAMBDA_ROLE='arn:aws:iam::745138876849:role/bat54lambdas'
 EDIT_LAMBDALIST='
 tweeterGetFollowees | lambda/follow/GetFolloweesLambda.handler
 tweeterGetFollowers | lambda/follow/GetFollowersLambda.handler
+tweeterGetStory | lambda/status/GetStoryLambda.handler
+tweeterGetFeed | lambda/status/GetFeedLambda.handler
+tweeterPostStatus | lambda/status/PostStatusLambda.handler
 '
 LAMBDALAYER_ARN='arn:aws:lambda:us-east-1:745138876849:layer:bat54tweeterLayer:6'
