@@ -11,16 +11,19 @@ export { AuthToken } from "./model/domain/AuthToken";
 // DTO
 //
 export type { UserDto } from "./model/dto/UserDto";
+export type { StatusDto } from "./model/dto/StatusDto";
 
 //
 // Requests
 //
-export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
+export type { PagedItemRequest } from "./model/net/request/PagedItemRequest";
+export type { PostRequest } from "./model/net/request/PostRequest";
 
 //
 // Repsonses
 //
-export type { PagedUserItemResponse } from "./model/net/response/PagedItemUserResponse";
+export type { TweeterResponse } from "./model/net/response/TweeterResponse";
+export type { PagedItemResponse } from "./model/net/response/PagedItemResponse";
 
 //
 // Other
