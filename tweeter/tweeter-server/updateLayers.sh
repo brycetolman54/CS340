@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Use this file to update the lambda layers for each lambda.
 # First create the new lambda layer, or lambda layer version in aws by uploading the new lambda layer code.
 # Then copy the arn for the lambda layer from aws to the .server LAMBDALAYER_ARN variable.
