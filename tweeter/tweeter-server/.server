@@ -16,4 +16,4 @@ tweeterGetFolloweeCount | lambda/follow/GetFolloweeCountLambda.followeeHandler
 tweeterGetFollowerCount | lambda/follow/GetFollowerCountLambda.followerHandler
 tweeterGetFollowStatus | lambda/follow/GetFollowStatusLambda.handler
 '
-LAMBDALAYER_ARN='arn:aws:lambda:us-east-1:745138876849:layer:bat54tweeterLayer:8'
+LAMBDALAYER_ARN='arn:aws:lambda:us-east-1:745138876849:layer:bat54tweeterLayer:9'
