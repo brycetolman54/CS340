@@ -5,7 +5,6 @@ import {
 } from "../../src/presenters/AppNavbarPresenter";
 import {
     anything,
-    capture,
     instance,
     mock,
     spy,
