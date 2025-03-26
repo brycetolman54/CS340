@@ -21,3 +21,5 @@
 - [DynamoDB Exercise](./exercises/dynamo-db)
 - [Proxy Exercise](./exercises/proxy)
 - [Factory Exercise](./exercies/factory-starter-code)
+- [Command Exercise](./exercises/command-start-code)
+- [SQS Exercise](./exercises/sqs)

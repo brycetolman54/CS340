@@ -1,0 +1,22 @@
+{
+  "name": "sqs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/SqsClient.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/aws-sdk": "^0.0.42",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sqs": "^3.775.0",
+    "@types/node": "^22.13.13"
+  }
+}
