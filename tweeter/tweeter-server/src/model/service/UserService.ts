@@ -1,8 +1,17 @@
 import { FakeData, UserDto, AuthTokenDto, User } from "tweeter-shared";
 import { followerHandler } from "../../lambda/follow/GetFollowerCountLambda";
 import { followeeHandler } from "../../lambda/follow/GetFolloweeCountLambda";
+import { FactoryDAO } from "../daos/FactoryDAO";
 
 export class UserService {
+    private factory: FactoryDAO;
+    // private userDao
+    // etc
+
+    public constructor(factory: FactoryDAO) {
+        this.factory = factory;
+    }
+
     public async getUser(
         token: string,
         alias: string
