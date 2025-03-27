@@ -1,11 +1,17 @@
 import { StatusDto, Status, FakeData } from "tweeter-shared";
 import { FactoryDAO } from "../daos/FactoryDAO";
+import { StatusDAO } from "../daos/StatusDAO";
+import { UserDAO } from "../daos/UserDAO";
 
 export class StatusService {
     private factory: FactoryDAO;
+    private userDAO: UserDAO;
+    private statusDAO: StatusDAO;
 
     public constructor(factory: FactoryDAO) {
         this.factory = factory;
+        this.userDAO = factory.getUserDAO();
+        this.statusDAO = factory.getStatusDAO();
     }
 
     public async loadMoreFeedItems(

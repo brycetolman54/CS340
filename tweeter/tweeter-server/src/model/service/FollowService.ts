@@ -1,11 +1,14 @@
 import { UserDto, FakeData, User } from "tweeter-shared";
 import { FactoryDAO } from "../daos/FactoryDAO";
+import { FollowDAO } from "../daos/FollowDAO";
 
 export class FollowService {
     private factory: FactoryDAO;
+    private followDAO: FollowDAO;
 
     public constructor(factory: FactoryDAO) {
         this.factory = factory;
+        this.followDAO = factory.getFollowDAO();
     }
 
     public async loadMoreFollowers(
