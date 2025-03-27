@@ -20,9 +20,9 @@ import { StoryPresenter } from "./presenters/StoryPresenter";
 import ItemScroller from "./components/mainLayout/ItemScroller";
 import StatusItem from "./components/statusItem/StatusItem";
 import { Status, User } from "tweeter-shared";
-import { StatusService } from "./model/StatusService";
+import { StatusService } from "./model/services/StatusService";
 import UserItem from "./components/userItem/UserItem";
-import { FollowService } from "./model/FollowService";
+import { FollowService } from "./model/services/FollowService";
 
 const App = () => {
     const { currentUser, authToken } = useUserInfo();

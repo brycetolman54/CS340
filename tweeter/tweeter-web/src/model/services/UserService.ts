@@ -1,6 +1,6 @@
 import { Buffer } from "buffer";
 import { AuthToken, User, FakeData } from "tweeter-shared";
-import { ServerFacade } from "../net/ServerFacade";
+import { ServerFacade } from "../../net/ServerFacade";
 
 export class UserService {
     private serverFacade = new ServerFacade();

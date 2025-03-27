@@ -1,6 +1,6 @@
 import { Status } from "tweeter-shared";
 import { ItemPresenter, ItemView } from "./ItemPresenter";
-import { StatusService } from "../model/StatusService";
+import { StatusService } from "../model/services/StatusService";
 
 export interface StatusItemView extends ItemView<Status> {
     addItems: (newItems: Status[]) => void;

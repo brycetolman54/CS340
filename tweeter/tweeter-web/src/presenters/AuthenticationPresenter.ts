@@ -1,6 +1,6 @@
 import { User, AuthToken } from "tweeter-shared";
 import { Presenter, View } from "./Presenter";
-import { UserService } from "../model/UserService";
+import { UserService } from "../model/services/UserService";
 
 export interface AuthenticationView extends View {
     navigate: (path: string) => void;

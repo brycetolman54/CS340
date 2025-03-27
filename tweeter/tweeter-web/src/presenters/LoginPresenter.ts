@@ -1,6 +1,6 @@
 import { User, AuthToken } from "tweeter-shared";
 import { AuthenticationPresenter } from "./AuthenticationPresenter";
-import { UserService } from "../model/UserService";
+import { UserService } from "../model/services/UserService";
 
 export class LoginPresenter extends AuthenticationPresenter {
     public authenticate(

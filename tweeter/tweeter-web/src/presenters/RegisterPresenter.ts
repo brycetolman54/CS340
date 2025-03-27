@@ -1,7 +1,6 @@
 import { Buffer } from "buffer";
 import { AuthenticationPresenter } from "./AuthenticationPresenter";
 import { User, AuthToken } from "tweeter-shared";
-import { UserService } from "../model/UserService";
 
 export class RegisterPresenter extends AuthenticationPresenter {
     protected authenticate(

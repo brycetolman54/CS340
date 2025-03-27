@@ -11,7 +11,7 @@ import {
     PostStatusPresenter,
     PostStatusView,
 } from "../../src/presenters/PostStatusPresenter";
-import { StatusService } from "../../src/model/StatusService";
+import { StatusService } from "../../src/model/services/StatusService";
 import { AuthToken, Status, User } from "tweeter-shared";
 
 describe("PostStatusPresenter", () => {
