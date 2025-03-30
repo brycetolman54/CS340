@@ -4,9 +4,6 @@ image-editor/ImageEditorFiles/*
 image-editor/dist/*
 
 tweeter/package-lock.json
-tweeter/package.json
-tweeter/tweeter-shared/package.json
-tweeter/tweeter-web/package.json
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
