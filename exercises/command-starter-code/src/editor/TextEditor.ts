@@ -1,10 +1,17 @@
 import { IDocument } from "../document/IDocument";
 import * as readline from "readline";
 import { UserInputReader } from "./UserInputReader";
+import { UndoRedoManager } from "../UndoRedoManager";
+import { InsertCommand } from "../commands/InsertCommand";
+import { DeleteCommand } from "../commands/DeleteCommand";
+import { ReplaceCommand } from "../commands/ReplaceCommand";
+import { StartCommand } from "../commands/StartCommand";
+import { OpenCommand } from "../commands/OpenCommand";
 
 export class TextEditor {
     private _document: IDocument;
     private consoleReader: readline.Interface;
+    private undoRedoManager = new UndoRedoManager();
 
     constructor(document: IDocument) {
         this._document = document;
@@ -43,13 +50,23 @@ export class TextEditor {
                     this.open();
                     break;
                 case 7:
-                    this._document.clear();
+                    this.undoRedoManager.execute(
+                        new StartCommand(this._document)
+                    );
                     break;
                 case 8:
-                    console.log("Undo");
+                    if (this.undoRedoManager.canUndo()) {
+                        this.undoRedoManager.undo();
+                    } else {
+                        console.log("No actions to undo");
+                    }
                     break;
                 case 9:
-                    console.log("Redo");
+                    if (this.undoRedoManager.canRedo()) {
+                        this.undoRedoManager.redo();
+                    } else {
+                        console.log("No actions to redo");
+                    }
                     break;
                 case 10:
                     process.exit(1);
@@ -84,7 +101,9 @@ Your selection: `;
         const sequenceInput = UserInputReader.getUserInput(
             "Sequence to insert: "
         );
-        this._document.insert(insertionIndex, sequenceInput);
+        this.undoRedoManager.execute(
+            new InsertCommand(insertionIndex, sequenceInput, this._document)
+        );
     }
 
     private delete(): void {
@@ -101,7 +120,15 @@ Your selection: `;
             deletionDistanceInput
         );
 
-        if (this._document.delete(deletionIndex, deletionDistance) == null) {
+        if (
+            this.undoRedoManager.execute(
+                new DeleteCommand(
+                    deletionIndex,
+                    deletionDistance,
+                    this._document
+                )
+            ) == null
+        ) {
             console.log("Deletion unsuccessful");
         }
     }
@@ -127,8 +154,14 @@ Your selection: `;
                 );
             }
 
-            this._document.delete(replaceIndex, replaceDistance);
-            this._document.insert(replaceIndex, replacementString);
+            this.undoRedoManager.execute(
+                new ReplaceCommand(
+                    replaceIndex,
+                    replaceDistance,
+                    replacementString,
+                    this._document
+                )
+            );
         }
     }
 
@@ -149,6 +182,8 @@ Your selection: `;
         const openFileName = UserInputReader.getUserInput(
             "Name of file to open: "
         );
-        this._document.open(openFileName);
+        this.undoRedoManager.execute(
+            new OpenCommand(openFileName, this._document)
+        );
     }
 }
