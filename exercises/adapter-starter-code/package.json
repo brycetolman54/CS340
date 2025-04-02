@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "@types/node": "^20.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "name": "adapter-starter-code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "undici-types": "^6.19.8"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
