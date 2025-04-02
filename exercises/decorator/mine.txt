@@ -1,0 +1,1 @@
+Hello there! This is a string that I have written to a file for the purpose of this exercise. It does not contain anything too exciting, but you can use decorators to change what you see. Have fun!
