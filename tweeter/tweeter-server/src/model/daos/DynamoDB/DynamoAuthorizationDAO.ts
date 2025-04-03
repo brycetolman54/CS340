@@ -1,4 +1,4 @@
-import { AuthToken, User } from "tweeter-shared";
+import { AuthToken } from "tweeter-shared";
 import { AuthorizationDAO } from "../AuthorizationDAO";
 
 export class DynamoAuthorizationDAO implements AuthorizationDAO {

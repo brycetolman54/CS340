@@ -14,4 +14,5 @@ export interface UserDAO {
         alias: string,
         password: string
     ) => Promise<User | null>;
+    updateImageURL: (alias: string, iamgeUrl: string) => Promise<void>;
 }

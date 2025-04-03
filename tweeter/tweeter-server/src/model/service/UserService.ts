@@ -72,6 +72,7 @@ export class UserService extends Service {
             imageFileExtension,
             alias
         );
+        await this.userDAO.updateImageURL(alias, imageUrl);
         user.imageUrl = imageUrl;
 
         const token = AuthToken.Generate();

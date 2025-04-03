@@ -4,7 +4,7 @@ import {
     DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
-    // UpdateCommand,
+    BatchGetCommand,
     QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -84,14 +84,30 @@ export class DynamoFollowDAO implements FollowDAO {
         pageSize: number,
         followers: boolean
     ): Promise<DataPage<User>> {
-        const params = followers
+        const aliasParams = followers
             ? this.getFollowerParams(alias, lastItem, pageSize)
             : this.getFolloweeParams(alias, lastItem, pageSize);
+        const aliasData = await this.client.send(new QueryCommand(aliasParams));
+        const hasMorePages = aliasData.LastEvaluatedKey !== undefined;
+
+        const userKeys = aliasData.Items?.map((item) => {
+            return followers
+                ? { [this.userKey]: item[this.followerKey] }
+                : { [this.userKey]: item[this.followeeKey] };
+        });
+        const userParams = {
+            RequestItems: {
+                [this.userTableName]: {
+                    Keys: userKeys,
+                },
+            },
+        };
+        const userData = await this.client.send(
+            new BatchGetCommand(userParams)
+        );
 
         const items: User[] = [];
-        const data = await this.client.send(new QueryCommand(params));
-        const hasMorePages = data.LastEvaluatedKey !== undefined;
-        data.Items?.forEach((item) =>
+        userData.Responses?.[this.userTableName].forEach((item) =>
             items.push(
                 new User(
                     item[this.firstNameAttr],
@@ -105,7 +121,7 @@ export class DynamoFollowDAO implements FollowDAO {
         return new DataPage<User>(items, hasMorePages);
     }
 
-    private getFollowerParams(
+    private getFolloweeParams(
         alias: string,
         lastItem: User | null,
         pageSize: number
@@ -130,7 +146,7 @@ export class DynamoFollowDAO implements FollowDAO {
         };
     }
 
-    private getFolloweeParams(
+    private getFollowerParams(
         alias: string,
         lastItem: User | null,
         pageSize: number
