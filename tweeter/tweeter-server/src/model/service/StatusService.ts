@@ -11,40 +11,24 @@ export class StatusService extends Service {
         this.statusDAO = factory.getStatusDAO();
     }
 
-    public async loadMoreFeedItems(
+    public async loadMoreStatusItems(
         token: string,
         userAlias: string,
         pageSize: number,
-        lastItem: StatusDto | null
+        lastItem: StatusDto | null,
+        feed: boolean
     ): Promise<[StatusDto[], boolean]> {
         await this.checkToken(token);
 
-        const [items, hasMore] = await this.statusDAO.getPageOfFeed(
+        const page = await this.statusDAO.getPageOfStatus(
             userAlias,
             Status.fromDto(lastItem),
-            pageSize
+            pageSize,
+            feed
         );
 
-        const dtos = items.map((status) => status.dto);
-        return [dtos, hasMore];
-    }
-
-    public async loadMoreStoryItems(
-        token: string,
-        userAlias: string,
-        pageSize: number,
-        lastItem: StatusDto | null
-    ): Promise<[StatusDto[], boolean]> {
-        await this.checkToken(token);
-
-        const [items, hasMore] = await this.statusDAO.getPageOfStory(
-            userAlias,
-            Status.fromDto(lastItem),
-            pageSize
-        );
-
-        const dtos = items.map((status) => status.dto);
-        return [dtos, hasMore];
+        const dtos = page.values.map((status) => status.dto);
+        return [dtos, page.hasMorePages];
     }
 
     public async postStatus(

@@ -6,11 +6,12 @@ export const handler = async (
     request: PagedItemRequest<StatusDto>
 ): Promise<PagedItemResponse<StatusDto>> => {
     const statusService = new StatusService(new DynamoFactory());
-    const [items, hasMore] = await statusService.loadMoreFeedItems(
+    const [items, hasMore] = await statusService.loadMoreStatusItems(
         request.token,
         request.userAlias,
         request.pageSize,
-        request.lastItem
+        request.lastItem,
+        true
     );
 
     return {
