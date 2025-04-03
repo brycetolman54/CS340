@@ -1,3 +1,7 @@
 export interface ImageDAO {
-    //todo
+    putImage: (
+        imageStringBase64: string,
+        imageFileExtension: string,
+        alias: string
+    ) => Promise<string>;
 }

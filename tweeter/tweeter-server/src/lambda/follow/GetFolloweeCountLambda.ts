@@ -6,9 +6,10 @@ export const followeeHandler = async (
     request: FollowRequest
 ): Promise<CountResponse> => {
     const userService = new UserService(new DynamoFactory());
-    const count = await userService.getFolloweeCount(
+    const count = await userService.getFollowCount(
         request.token,
-        request.user
+        request.user,
+        false
     );
 
     return {

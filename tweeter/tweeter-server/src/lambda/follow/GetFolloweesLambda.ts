@@ -6,11 +6,12 @@ export const handler = async (
     request: PagedItemRequest<UserDto>
 ): Promise<PagedItemResponse<UserDto>> => {
     const followService = new FollowService(new DynamoFactory());
-    const [items, hasMore] = await followService.loadMoreFollowees(
+    const [items, hasMore] = await followService.loadMoreFollows(
         request.token,
         request.userAlias,
         request.pageSize,
-        request.lastItem
+        request.lastItem,
+        false
     );
 
     return {

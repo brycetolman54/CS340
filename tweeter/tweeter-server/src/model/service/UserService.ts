@@ -5,15 +5,18 @@ import { FactoryDAO } from "../daos/FactoryDAO";
 import { UserDAO } from "../daos/UserDAO";
 import { FollowDAO } from "../daos/FollowDAO";
 import { Service } from "./Service";
+import { ImageDAO } from "../daos/ImageDAO";
 
 export class UserService extends Service {
     private userDAO: UserDAO;
     private followDAO: FollowDAO;
+    private imageDAO: ImageDAO;
 
     public constructor(factory: FactoryDAO) {
         super(factory);
         this.userDAO = factory.getUserDAO();
         this.followDAO = factory.getFollowDAO();
+        this.imageDAO = factory.getImageDAO();
     }
 
     public async getUser(
@@ -57,14 +60,19 @@ export class UserService extends Service {
             firstName,
             lastName,
             alias,
-            password,
-            imageStringBase64,
-            imageFileExtension
+            password
         );
 
         if (user === null) {
             throw new Error("Invalid registration");
         }
+
+        const imageUrl = await this.imageDAO.putImage(
+            imageStringBase64,
+            imageFileExtension,
+            alias
+        );
+        user.imageUrl = imageUrl;
 
         const token = AuthToken.Generate();
         this.authorizationDAO.addToken(token, alias);
@@ -72,52 +80,40 @@ export class UserService extends Service {
         return [user.dto, token.dto];
     }
 
-    public async unfollow(
+    public async changeFollow(
         token: string,
-        userToUnfollow: UserDto
+        followUser: UserDto,
+        follow: boolean
     ): Promise<[followerCount: number, followeeCount: number]> {
-        const followerCount = await followerHandler({
-            token: token,
-            user: userToUnfollow,
-        });
-        const followeeCount = await followeeHandler({
-            token: token,
-            user: userToUnfollow,
-        });
+        await this.checkToken(token);
 
-        return [followerCount.count, followeeCount.count];
+        const alias = await this.authorizationDAO.getUserFromToken(token);
+
+        if (follow) {
+            await this.followDAO.addFollow(alias, followUser.alias);
+        } else {
+            await this.followDAO.deleteFollow(alias, followUser.alias);
+        }
+
+        const followerCount = await this.followDAO.getFollowCount(
+            followUser.alias,
+            true
+        );
+        const followeeCount = await this.followDAO.getFollowCount(
+            followUser.alias,
+            false
+        );
+
+        return [followerCount, followeeCount];
     }
 
-    public async follow(
+    public async getFollowCount(
         token: string,
-        userToFollow: UserDto
-    ): Promise<[followerCount: number, followeeCount: number]> {
-        const followerCount = await followerHandler({
-            token: token,
-            user: userToFollow,
-        });
-        const followeeCount = await followeeHandler({
-            token: token,
-            user: userToFollow,
-        });
-
-        return [followerCount.count, followeeCount.count];
-    }
-
-    public async getFollowerCount(
-        token: string,
-        user: UserDto
+        user: UserDto,
+        followers: boolean
     ): Promise<number> {
         await this.checkToken(token);
-        return this.followDAO.getFollowerCount(user.alias);
-    }
-
-    public async getFolloweeCount(
-        token: string,
-        user: UserDto
-    ): Promise<number> {
-        await this.checkToken(token);
-        return this.followDAO.getFolloweeCount(user.alias);
+        return this.followDAO.getFollowCount(user.alias, followers);
     }
 
     public async getIsFollowerStatus(

@@ -1,51 +1,39 @@
 import fs from "fs";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+    S3Client,
+    PutObjectCommand,
+    ObjectCannedACL,
+} from "@aws-sdk/client-s3";
 import { ImageDAO } from "../ImageDAO";
 
 export class DynamoImageDAO implements ImageDAO {
-    // async function s3upload() {
-    //   if(process.argv.length !== 3) {
-    //     console.log("Specify the file to upload on the command line");
-    //     process.exit();
-    //   }
-    //   try {
-    //     const client = new S3Client();
-    //     const fileContent = fs.readFileSync(process.argv[2]);
-    //     const params = {
-    //       "Body": fileContent,
-    //       "Bucket": "bat54sdk",
-    //       "Key": "sdkFile",
-    //     }
-    //     const command = new PutObjectCommand(params)
-    //     const response = await client.send(command)
-    //     console.log("File upload successful with ", response.$metadata.httpStatusCode);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    //     }  async putImage(
-    //     fileName: string,
-    //     imageStringBase64Encoded: string
-    //   ): Promise<string> {
-    //     let decodedImageBuffer: Buffer = Buffer.from(
-    //       imageStringBase64Encoded,
-    //       "base64"
-    //     );
-    //     const s3Params = {
-    //       Bucket: BUCKET,
-    //       Key: "image/" + fileName,
-    //       Body: decodedImageBuffer,
-    //       ContentType: "image/png",
-    //       ACL: ObjectCannedACL.public_read,
-    //     };
-    //     const c = new PutObjectCommand(s3Params);
-    //     const client = new S3Client({ region: REGION });
-    //     try {
-    //       await client.send(c);
-    //       return (
-    //       `https://${BUCKET}.s3.${REGION}.amazonaws.com/image/${fileName}`
-    //   );
-    // } catch (error) {
-    //   throw Error("s3 put image failed with: " + error);
-    // }
-    //   }
+    private readonly BUCKET = "bat54-tweeter-images";
+    private readonly REGION = "us-east-1";
+
+    public async putImage(
+        imageStringBase64: string,
+        imageFileExtension: string,
+        alias: string
+    ): Promise<string> {
+        let decodedImageBuffer: Buffer = Buffer.from(
+            imageStringBase64,
+            "base64"
+        );
+        let filename = alias + "." + imageFileExtension;
+        const s3Params = {
+            Bucket: this.BUCKET,
+            Key: "image/" + filename,
+            Body: decodedImageBuffer,
+            ContentType: "image/" + imageFileExtension,
+            ACL: ObjectCannedACL.public_read,
+        };
+        const c = new PutObjectCommand(s3Params);
+        const client = new S3Client({ region: this.REGION });
+        try {
+            await client.send(c);
+            return `https://${this.BUCKET}.s3.${this.REGION}.amazonaws.com/image/${filename}`;
+        } catch (error) {
+            throw Error("s3 put image failed with: " + error);
+        }
+    }
 }

@@ -11,37 +11,22 @@ export class FollowService extends Service {
         this.followDAO = factory.getFollowDAO();
     }
 
-    public async loadMoreFollowers(
+    public async loadMoreFollows(
         token: string,
         userAlias: string,
         pageSize: number,
-        lastItem: UserDto | null
+        lastItem: UserDto | null,
+        followers: boolean
     ): Promise<[UserDto[], boolean]> {
         await this.checkToken(token);
 
-        const [items, hasMore] = await this.followDAO.getPageOfFollowers(
+        const page = await this.followDAO.getPageOfFollows(
             userAlias,
             User.fromDto(lastItem),
-            pageSize
+            pageSize,
+            followers
         );
-        const dtos = items.map((user) => user.dto);
-        return [dtos, hasMore];
-    }
-
-    public async loadMoreFollowees(
-        token: string,
-        userAlias: string,
-        pageSize: number,
-        lastItem: UserDto | null
-    ): Promise<[UserDto[], boolean]> {
-        await this.checkToken(token);
-
-        const [items, hasMore] = await this.followDAO.getPageOfFollowees(
-            userAlias,
-            User.fromDto(lastItem),
-            pageSize
-        );
-        const dtos = items.map((user) => user.dto);
-        return [dtos, hasMore];
+        const dtos = page.values.map((user) => user.dto);
+        return [dtos, page.hasMorePages];
     }
 }

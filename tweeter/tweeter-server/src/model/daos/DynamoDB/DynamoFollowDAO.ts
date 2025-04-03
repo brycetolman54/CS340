@@ -1,188 +1,158 @@
 import { FollowDAO } from "../FollowDAO";
+import {
+    DeleteCommand,
+    DynamoDBDocumentClient,
+    GetCommand,
+    PutCommand,
+    // UpdateCommand,
+    QueryCommand,
+} from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DataPage } from "../../entity/DataPage";
+import { User } from "tweeter-shared";
 
 export class DynamoFollowDAO implements FollowDAO {
-    // todoimport { Follow } from "./entity/Follow";
-    // import { FollowDAO } from "./dao/FollowDAO";
-    // import { DataPage } from "./entity/DataPage";
-    // class OldMain {
-    //     async run() {
-    //         const followDAO = new FollowDAO();
-    //         const oneFollow = new Follow("@bryce", "bryce", "@rylie", "rylie");
-    //         const followKeys = new Follow("@bryce", "", "@rylie", "");
-    //         const twoFollow = new Follow("@bryce", "Bryce", "@rylie", "Rylie");
-    //         await followDAO.putFollow(oneFollow);
-    //         let follow: Follow | undefined = await followDAO.getFollow(followKeys);
-    //         if (!(follow instanceof Follow)) {
-    //             console.log("follow is not of type Follow");
-    //             return 0;
-    //         } else {
-    //             console.log("Got: ", follow.toString());
-    //         }
-    //         await followDAO.updateFollow(twoFollow);
-    //         let follow2: Follow | undefined = await followDAO.getFollow(followKeys);
-    //         if (!(follow2 instanceof Follow)) {
-    //             console.log("follow is not of type Follow");
-    //             return 0;
-    //         } else {
-    //             console.log("Got: ", follow2.toString());
-    //         }
-    //         await followDAO.deleteFollow(oneFollow);
-    //         let undef: Follow | undefined = await followDAO.getFollow(followKeys);
-    //         if (typeof undef != "undefined") {
-    //             console.log("follow is not of type undefined");
-    //             return 0;
-    //         } else {
-    //             console.log("Got: undefined");
-    //         }
-    //     }
-    // }
-    // class Main {
-    //     async run() {
-    //         const followDAO = new FollowDAO();
-    //         const followKey = new Follow("@bryce", "", "@rylie", "");
-    //         const updateFollow = new Follow("@bryce", "BRYCE", "@rylie", "RYLIE");
-    //         const followers = [
-    //             "abe",
-    //             "ben",
-    //             "cade",
-    //             "derick",
-    //             "edgar",
-    //             "frank",
-    //             "gerald",
-    //             "henry",
-    //             "isaac",
-    //             "john",
-    //             "kim",
-    //             "lucy",
-    //             "mary",
-    //             "nick",
-    //             "oswald",
-    //             "patty",
-    //             "quinn",
-    //             "rick",
-    //             "steven",
-    //             "tristan",
-    //             "ursula",
-    //             "vick",
-    //             "wendy",
-    //             "xavier",
-    //             "zane",
-    //         ];
-    //         const followees = [
-    //             "andy",
-    //             "briton",
-    //             "carol",
-    //             "denise",
-    //             "eve",
-    //             "francine",
-    //             "gary",
-    //             "harry",
-    //             "irene",
-    //             "judy",
-    //             "kris",
-    //             "lowell",
-    //             "maurice",
-    //             "nicholas",
-    //             "oscar",
-    //             "perry",
-    //             "qi",
-    //             "rylie",
-    //             "sophie",
-    //             "tali",
-    //             "uncle",
-    //             "victor",
-    //             "west",
-    //             "yulesy",
-    //             "zion",
-    //         ];
-    //         // put 25 followers (same followee)
-    //         console.log("Posting 25 Followers:\n");
-    //         followers.forEach(async (follower) => {
-    //             await followDAO.putFollow(
-    //                 new Follow("@" + follower, follower, "@tolman", "tolman")
-    //             );
-    //         });
-    //         // put 25 followees (same follower)
-    //         console.log("Posting 25 Followees:\n");
-    //         followees.forEach(async (followee) => {
-    //             await followDAO.putFollow(
-    //                 new Follow("@bryce", "bryce", "@" + followee, followee)
-    //             );
-    //         });
-    //         // get one item
-    //         console.log("Getting item:");
-    //         let follow = await followDAO.getFollow(followKey);
-    //         if (!(follow instanceof Follow)) {
-    //             console.log("follow is not of instance follow");
-    //             return 0;
-    //         } else {
-    //             console.log("  Got: ", follow.toString(), "\n");
-    //         }
-    //         // update one item
-    //         console.log("Updating item:");
-    //         await followDAO.updateFollow(updateFollow);
-    //         follow = await followDAO.getFollow(followKey);
-    //         if (!(follow instanceof Follow)) {
-    //             console.log("follow is not of instance follow");
-    //             return 0;
-    //         } else {
-    //             console.log("  Got: ", follow.toString(), "\n");
-    //         }
-    //         // delete one item
-    //         console.log("Deleting item:");
-    //         await followDAO.deleteFollow(updateFollow);
-    //         follow = await followDAO.getFollow(followKey);
-    //         if (typeof follow != "undefined") {
-    //             console.log("follow is not undefined");
-    //             return 0;
-    //         } else {
-    //             console.log("  Got: undefined\n");
-    //         }
-    //         // get 2 pages of followees
-    //         console.log("Getting Followees: ");
-    //         let page: DataPage<Follow> = await followDAO.getPageOfFollowees(
-    //             "@bryce"
-    //         );
-    //         let followeesPaged: Follow[] = page.values;
-    //         console.log("  Page 1:");
-    //         followeesPaged.forEach((f) => {
-    //             console.log("    " + f.toString());
-    //         });
-    //         console.log("  More Pages? ", page.hasMorePages, "\n");
-    //         const lastFolloweeHandle =
-    //             followeesPaged[followeesPaged.length - 1].followee_handle;
-    //         page = await followDAO.getPageOfFollowees("@bryce", lastFolloweeHandle);
-    //         followeesPaged = page.values;
-    //         console.log("  Page 2:");
-    //         followeesPaged.forEach((f) => {
-    //             console.log("    " + f.toString());
-    //         });
-    //         console.log("  More Pages? ", page.hasMorePages, "\n");
-    //         // get 2 pages of followers
-    //         console.log("Getting Followers: ");
-    //         page = await followDAO.getPageOfFollowers("@tolman");
-    //         let followersPaged: Follow[] = page.values;
-    //         console.log("  Page 1:");
-    //         followersPaged.forEach((f) => {
-    //             console.log("    " + f.toString());
-    //         });
-    //         console.log("  More Pages? ", page.hasMorePages, "\n");
-    //         const lastFollowerHandle =
-    //             followersPaged[followersPaged.length - 1].follower_handle;
-    //         page = await followDAO.getPageOfFollowers(
-    //             "@tolman",
-    //             lastFollowerHandle
-    //         );
-    //         followersPaged = page.values;
-    //         console.log("Page 2:");
-    //         followersPaged.forEach((f) => {
-    //             console.log("    " + f.toString());
-    //         });
-    //         console.log("  More Pages? ", page.hasMorePages, "\n");
-    //     }
-    // }
-    // function run() {
-    //     new Main().run();
-    // }
-    // run();
+    private readonly followTableName = "follows";
+    private readonly indexName = "follows_index";
+    private readonly followerKey = "follower_handle";
+    private readonly followeeKey = "followee_handle";
+
+    private readonly userTableName = "users";
+    private readonly userKey = "user_handle";
+    private readonly followersKey = "followers";
+    private readonly followeesKey = "followees";
+
+    private readonly firstNameAttr = "firstName";
+    private readonly lastNameAttr = "lastName";
+    private readonly imageUrlAttr = "imageUrl";
+
+    private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
+
+    // put a new follower
+    public async addFollow(
+        alias: string,
+        userToFollowAlias: string
+    ): Promise<void> {
+        const params = {
+            TableName: this.followTableName,
+            Item: this.generateFollowItem(alias, userToFollowAlias),
+        };
+        await this.client.send(new PutCommand(params));
+    }
+
+    // delete a follower
+    public async deleteFollow(
+        alias: string,
+        userToUnfollowAlias: string
+    ): Promise<void> {
+        const params = {
+            TableName: this.followTableName,
+            Key: this.generateFollowItem(alias, userToUnfollowAlias),
+        };
+        await this.client.send(new DeleteCommand(params));
+    }
+
+    // generate a key
+    private generateFollowItem(alias: string, alias2: string) {
+        return {
+            [this.followerKey]: alias,
+            [this.followeeKey]: alias2,
+        };
+    }
+
+    public async getFollowCount(
+        alias: string,
+        followers: boolean
+    ): Promise<number> {
+        const params = {
+            TableName: this.userTableName,
+            Key: {
+                [this.userKey]: alias,
+            },
+        };
+        const output = await this.client.send(new GetCommand(params));
+        if (output.Item == undefined) {
+            throw new Error("dynamodb get failed to find user");
+        }
+        return output.Item[followers ? this.followersKey : this.followeesKey];
+    }
+
+    // get paged followees
+    public async getPageOfFollows(
+        alias: string,
+        lastItem: User | null,
+        pageSize: number,
+        followers: boolean
+    ): Promise<DataPage<User>> {
+        const params = followers
+            ? this.getFollowerParams(alias, lastItem, pageSize)
+            : this.getFolloweeParams(alias, lastItem, pageSize);
+
+        const items: User[] = [];
+        const data = await this.client.send(new QueryCommand(params));
+        const hasMorePages = data.LastEvaluatedKey !== undefined;
+        data.Items?.forEach((item) =>
+            items.push(
+                new User(
+                    item[this.firstNameAttr],
+                    item[this.lastNameAttr],
+                    item[this.userKey],
+                    item[this.imageUrlAttr]
+                )
+            )
+        );
+
+        return new DataPage<User>(items, hasMorePages);
+    }
+
+    private getFollowerParams(
+        alias: string,
+        lastItem: User | null,
+        pageSize: number
+    ) {
+        return {
+            KeyConditionExpression: "#v = :v",
+            ExpressionAttributeNames: {
+                "#v": this.followerKey,
+            },
+            ExpressionAttributeValues: {
+                ":v": alias,
+            },
+            TableName: this.followTableName,
+            Limit: pageSize,
+            ExclusiveStartKey:
+                lastItem === null
+                    ? undefined
+                    : {
+                          [this.followerKey]: alias,
+                          [this.followeeKey]: lastItem.alias,
+                      },
+        };
+    }
+
+    private getFolloweeParams(
+        alias: string,
+        lastItem: User | null,
+        pageSize: number
+    ) {
+        return {
+            KeyConditionExpression: "#v = :v",
+            ExpressionAttributeNames: {
+                "#v": this.followeeKey,
+            },
+            ExpressionAttributeValues: {
+                ":v": alias,
+            },
+            TableName: this.followTableName,
+            IndexName: this.indexName,
+            Limit: pageSize,
+            ExclusiveStartKey:
+                lastItem === null
+                    ? undefined
+                    : {
+                          [this.followerKey]: alias,
+                          [this.followeeKey]: lastItem.alias,
+                      },
+        };
+    }
 }
