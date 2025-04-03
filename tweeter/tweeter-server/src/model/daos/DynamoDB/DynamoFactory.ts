@@ -1,4 +1,6 @@
+import { AuthorizationDAO } from "../AuthorizationDAO";
 import { FactoryDAO } from "../FactoryDAO";
+import { DynamoAuthorizationDAO } from "./DynamoAuthorizationDAO";
 import { DynamoFollowDAO } from "./DynamoFollowDAO";
 import { DynamoImageDAO } from "./DynamoImageDAO";
 import { DynamoStatusDAO } from "./DynamoStatusDAO";
@@ -19,5 +21,9 @@ export class DynamoFactory implements FactoryDAO {
 
     public getUserDAO() {
         return new DynamoUserDAO();
+    }
+
+    public getAuthorizationDAO() {
+        return new DynamoAuthorizationDAO();
     }
 }

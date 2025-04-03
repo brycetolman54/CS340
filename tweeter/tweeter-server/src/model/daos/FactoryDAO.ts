@@ -1,3 +1,4 @@
+import { AuthorizationDAO } from "./AuthorizationDAO";
 import { FollowDAO } from "./FollowDAO";
 import { ImageDAO } from "./ImageDAO";
 import { StatusDAO } from "./StatusDAO";
@@ -8,4 +9,5 @@ export interface FactoryDAO {
     getImageDAO: () => ImageDAO;
     getUserDAO: () => UserDAO;
     getStatusDAO: () => StatusDAO;
+    getAuthorizationDAO: () => AuthorizationDAO;
 }

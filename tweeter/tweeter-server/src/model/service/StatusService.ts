@@ -1,16 +1,13 @@
-import { StatusDto, Status, FakeData } from "tweeter-shared";
+import { StatusDto, Status } from "tweeter-shared";
 import { FactoryDAO } from "../daos/FactoryDAO";
 import { StatusDAO } from "../daos/StatusDAO";
-import { UserDAO } from "../daos/UserDAO";
+import { Service } from "./Service";
 
-export class StatusService {
-    private factory: FactoryDAO;
-    private userDAO: UserDAO;
+export class StatusService extends Service {
     private statusDAO: StatusDAO;
 
     public constructor(factory: FactoryDAO) {
-        this.factory = factory;
-        this.userDAO = factory.getUserDAO();
+        super(factory);
         this.statusDAO = factory.getStatusDAO();
     }
 
@@ -20,7 +17,16 @@ export class StatusService {
         pageSize: number,
         lastItem: StatusDto | null
     ): Promise<[StatusDto[], boolean]> {
-        return this.getFakeData(lastItem, pageSize);
+        await this.checkToken(token);
+
+        const [items, hasMore] = await this.statusDAO.getPageOfFeed(
+            userAlias,
+            Status.fromDto(lastItem),
+            pageSize
+        );
+
+        const dtos = items.map((status) => status.dto);
+        return [dtos, hasMore];
     }
 
     public async loadMoreStoryItems(
@@ -29,25 +35,26 @@ export class StatusService {
         pageSize: number,
         lastItem: StatusDto | null
     ): Promise<[StatusDto[], boolean]> {
-        return this.getFakeData(lastItem, pageSize);
+        await this.checkToken(token);
+
+        const [items, hasMore] = await this.statusDAO.getPageOfStory(
+            userAlias,
+            Status.fromDto(lastItem),
+            pageSize
+        );
+
+        const dtos = items.map((status) => status.dto);
+        return [dtos, hasMore];
     }
 
     public async postStatus(
         token: string,
         newStatus: StatusDto
     ): Promise<void> {
-        await new Promise((f) => setTimeout(f, 2000));
-    }
+        await this.checkToken(token);
 
-    private async getFakeData(
-        lastItem: StatusDto | null,
-        pageSize: number
-    ): Promise<[StatusDto[], boolean]> {
-        const [items, hasMore] = FakeData.instance.getPageOfStatuses(
-            Status.fromDto(lastItem),
-            pageSize
-        );
-        const dtos = items.map((status) => status.dto);
-        return [dtos, hasMore];
+        const alias = await this.authorizationDAO.getUserFromToken(token);
+
+        await this.statusDAO.postStatus(newStatus, alias);
     }
 }

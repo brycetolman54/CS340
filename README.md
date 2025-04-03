@@ -23,3 +23,6 @@
 - [Factory Exercise](./exercies/factory-starter-code)
 - [Command Exercise](./exercises/command-start-code)
 - [SQS Exercise](./exercises/sqs)
+- [Adapter Exercise](./exercises/adapter)
+- [Decorator Exercise](/exercises/decorator)
+- [Strategy Exercise](./exercises/strategy)

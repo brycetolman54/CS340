@@ -1,21 +1,18 @@
-import { FakeData, UserDto, AuthTokenDto, User, Follow } from "tweeter-shared";
+import { UserDto, AuthTokenDto, AuthToken } from "tweeter-shared";
 import { followerHandler } from "../../lambda/follow/GetFollowerCountLambda";
 import { followeeHandler } from "../../lambda/follow/GetFolloweeCountLambda";
 import { FactoryDAO } from "../daos/FactoryDAO";
 import { UserDAO } from "../daos/UserDAO";
-import { ImageDAO } from "../daos/ImageDAO";
 import { FollowDAO } from "../daos/FollowDAO";
+import { Service } from "./Service";
 
-export class UserService {
-    private factory: FactoryDAO;
+export class UserService extends Service {
     private userDAO: UserDAO;
-    private imageDAO: ImageDAO;
     private followDAO: FollowDAO;
 
     public constructor(factory: FactoryDAO) {
-        this.factory = factory;
+        super(factory);
         this.userDAO = factory.getUserDAO();
-        this.imageDAO = factory.getImageDAO();
         this.followDAO = factory.getFollowDAO();
     }
 
@@ -23,25 +20,27 @@ export class UserService {
         token: string,
         alias: string
     ): Promise<UserDto | null> {
-        const user = FakeData.instance.findUserByAlias(alias);
+        await this.checkToken(token);
+        const user = await this.userDAO.getUser(alias);
         return user == null ? null : user.dto;
     }
 
     public async logout(token: string): Promise<void> {
-        await new Promise((res) => setTimeout(res, 1000));
+        await this.authorizationDAO.deleteToken(token);
     }
 
     public async login(
         alias: string,
         password: string
     ): Promise<[UserDto, AuthTokenDto]> {
-        const user = FakeData.instance.firstUser;
+        const user = await this.userDAO.getUserWithPassword(alias, password);
 
         if (user === null) {
             throw new Error("Invalid alias or password");
         }
 
-        const token = FakeData.instance.authToken;
+        const token = AuthToken.Generate();
+        this.authorizationDAO.addToken(token, alias);
 
         return [user.dto, token.dto];
     }
@@ -54,13 +53,21 @@ export class UserService {
         imageStringBase64: string,
         imageFileExtension: string
     ): Promise<[UserDto, AuthTokenDto]> {
-        const user = FakeData.instance.firstUser;
+        let user = await this.userDAO.createUser(
+            firstName,
+            lastName,
+            alias,
+            password,
+            imageStringBase64,
+            imageFileExtension
+        );
 
         if (user === null) {
             throw new Error("Invalid registration");
         }
 
-        const token = FakeData.instance.authToken;
+        const token = AuthToken.Generate();
+        this.authorizationDAO.addToken(token, alias);
 
         return [user.dto, token.dto];
     }
@@ -69,8 +76,6 @@ export class UserService {
         token: string,
         userToUnfollow: UserDto
     ): Promise<[followerCount: number, followeeCount: number]> {
-        await new Promise((f) => setTimeout(f, 2000));
-
         const followerCount = await followerHandler({
             token: token,
             user: userToUnfollow,
@@ -87,8 +92,6 @@ export class UserService {
         token: string,
         userToFollow: UserDto
     ): Promise<[followerCount: number, followeeCount: number]> {
-        await new Promise((f) => setTimeout(f, 2000));
-
         const followerCount = await followerHandler({
             token: token,
             user: userToFollow,
@@ -105,14 +108,16 @@ export class UserService {
         token: string,
         user: UserDto
     ): Promise<number> {
-        return FakeData.instance.getFollowerCount(user.alias);
+        await this.checkToken(token);
+        return this.followDAO.getFollowerCount(user.alias);
     }
 
     public async getFolloweeCount(
         token: string,
         user: UserDto
     ): Promise<number> {
-        return FakeData.instance.getFolloweeCount(user.alias);
+        await this.checkToken(token);
+        return this.followDAO.getFolloweeCount(user.alias);
     }
 
     public async getIsFollowerStatus(
@@ -120,6 +125,7 @@ export class UserService {
         user: UserDto,
         selectedUser: UserDto
     ): Promise<boolean> {
-        return FakeData.instance.isFollower();
+        await this.checkToken(token);
+        return this.userDAO.isFollower(user.alias, selectedUser.alias);
     }
 }

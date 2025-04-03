@@ -1,3 +1,4 @@
 export interface FollowDAO {
-    // todo
+    getFollowerCount: (alias: string) => Promise<number>;
+    getFolloweeCount: (alias: string) => Promise<number>;
 }
