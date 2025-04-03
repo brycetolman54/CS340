@@ -45,7 +45,7 @@ export class ClientCommunicator {
         } catch (error) {
             console.error(error);
             throw new Error(
-                `Client communicater ${params.method} failed:\n${
+                `Client communicator ${params.method} failed:\n${
                     (error as Error).message
                 }`
             );

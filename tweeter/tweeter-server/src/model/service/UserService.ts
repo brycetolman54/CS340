@@ -1,6 +1,4 @@
 import { UserDto, AuthTokenDto, AuthToken } from "tweeter-shared";
-import { followerHandler } from "../../lambda/follow/GetFollowerCountLambda";
-import { followeeHandler } from "../../lambda/follow/GetFolloweeCountLambda";
 import { FactoryDAO } from "../daos/FactoryDAO";
 import { UserDAO } from "../daos/UserDAO";
 import { FollowDAO } from "../daos/FollowDAO";
@@ -88,7 +86,7 @@ export class UserService extends Service {
     ): Promise<[followerCount: number, followeeCount: number]> {
         await this.checkToken(token);
 
-        const alias = await this.authorizationDAO.getUserFromToken(token);
+        const alias = await this.authorizationDAO.getAliasFromToken(token);
 
         if (follow) {
             await this.followDAO.addFollow(alias, followUser.alias);

@@ -1,7 +1,6 @@
 import {
     AuthorizedRequest,
     AuthToken,
-    AuthTokenDto,
     CountResponse,
     FollowRequest,
     FollowResponse,

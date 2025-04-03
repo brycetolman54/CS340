@@ -66,9 +66,7 @@ export class DynamoFollowDAO implements FollowDAO {
     ): Promise<number> {
         const params = {
             TableName: this.userTableName,
-            Key: {
-                [this.userKey]: alias,
-            },
+            Key: { [this.userKey]: alias },
         };
         const output = await this.client.send(new GetCommand(params));
         if (output.Item == undefined) {

@@ -53,7 +53,7 @@ export class StatusService extends Service {
     ): Promise<void> {
         await this.checkToken(token);
 
-        const alias = await this.authorizationDAO.getUserFromToken(token);
+        const alias = await this.authorizationDAO.getAliasFromToken(token);
 
         await this.statusDAO.postStatus(newStatus, alias);
     }
