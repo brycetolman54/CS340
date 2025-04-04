@@ -37,11 +37,11 @@ export class UserService extends Service {
         const user = await this.userDAO.getUserWithPassword(alias, password);
 
         if (user === null) {
-            throw new Error("Invalid alias or password");
+            throw new Error("Bad Request: Invalid alias or password");
         }
 
         const token = AuthToken.Generate();
-        this.authorizationDAO.addToken(token, alias);
+        await this.authorizationDAO.addToken(token, alias);
 
         return [user.dto, token.dto];
     }
@@ -62,7 +62,7 @@ export class UserService extends Service {
         );
 
         if (user === null) {
-            throw new Error("Invalid registration");
+            throw new Error("Bad Request: Invalid registration");
         }
 
         const imageUrl = await this.imageDAO.putImage(
@@ -74,7 +74,7 @@ export class UserService extends Service {
         user.imageUrl = imageUrl;
 
         const token = AuthToken.Generate();
-        this.authorizationDAO.addToken(token, alias);
+        await this.authorizationDAO.addToken(token, alias);
 
         return [user.dto, token.dto];
     }
@@ -112,7 +112,7 @@ export class UserService extends Service {
         followers: boolean
     ): Promise<number> {
         await this.checkToken(token);
-        return this.followDAO.getFollowCount(user.alias, followers);
+        return await this.followDAO.getFollowCount(user.alias, followers);
     }
 
     public async getIsFollowerStatus(
@@ -121,6 +121,6 @@ export class UserService extends Service {
         selectedUser: UserDto
     ): Promise<boolean> {
         await this.checkToken(token);
-        return this.userDAO.isFollower(user.alias, selectedUser.alias);
+        return await this.userDAO.isFollower(user.alias, selectedUser.alias);
     }
 }

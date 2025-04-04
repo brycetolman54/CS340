@@ -38,6 +38,7 @@ export class DynamoFollowDAO implements FollowDAO {
             Item: this.generateFollowItem(alias, userToFollowAlias),
         };
         await this.client.send(new PutCommand(params));
+        // upfate count
     }
 
     // delete a follower
@@ -70,7 +71,7 @@ export class DynamoFollowDAO implements FollowDAO {
         };
         const output = await this.client.send(new GetCommand(params));
         if (output.Item == undefined) {
-            throw new Error("dynamodb get failed to find user");
+            throw new Error("Server Error: dynamodb get failed to find user");
         }
         return output.Item[followers ? this.followersKey : this.followeesKey];
     }

@@ -37,8 +37,3 @@ export type { LoginResponse } from "./model/net/response/LoginResponse";
 export type { FollowResponse } from "./model/net/response/FollowResponse";
 export type { CountResponse } from "./model/net/response/CountResponse";
 export type { FollowStatusResponse } from "./model/net/response/FollowStatusResponse";
-
-//
-// Other
-//
-export { FakeData } from "./util/FakeData";

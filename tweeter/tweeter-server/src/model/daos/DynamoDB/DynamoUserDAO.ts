@@ -21,6 +21,8 @@ export class DynamoUserDAO implements UserDAO {
 
     private readonly followerKey = "follower_handle";
     private readonly followeeKey = "followee_handle";
+    private readonly followersKey = "followers";
+    private readonly followeesKey = "followees";
 
     private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
 
@@ -82,7 +84,6 @@ export class DynamoUserDAO implements UserDAO {
         if ((await this.grabUser(alias)) != undefined) {
             return null;
         }
-
         const hash = bcrypt.hashSync(password, 10);
 
         const params = {
@@ -93,6 +94,8 @@ export class DynamoUserDAO implements UserDAO {
                 [this.lastNameAttr]: lastName,
                 [this.imageUrlAttr]: "",
                 [this.passwordAttr]: hash,
+                [this.followersKey]: 0,
+                [this.followeesKey]: 0,
             },
         };
         await this.client.send(new PutCommand(params));

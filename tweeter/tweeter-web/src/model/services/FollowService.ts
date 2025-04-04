@@ -1,5 +1,5 @@
 import { AuthToken, User } from "tweeter-shared";
-import { ServerFacade } from "../net/ServerFacade";
+import { ServerFacade } from "../../net/ServerFacade";
 
 export class FollowService {
     private serverFacade = new ServerFacade();

@@ -64,8 +64,8 @@ export class DynamoAuthorizationDAO implements AuthorizationDAO {
         const params = {
             TableName: this.tableName,
             Item: {
-                [this.tokenKey]: token,
-                [this.timestampKey]: Date.now(),
+                [this.tokenKey]: token.token,
+                [this.timestampKey]: token.timestamp,
                 [this.aliasKey]: alias,
             },
         };

@@ -1,5 +1,5 @@
 import { AuthToken, Status } from "tweeter-shared";
-import { ServerFacade } from "../net/ServerFacade";
+import { ServerFacade } from "../../net/ServerFacade";
 
 export class StatusService {
     private serverFacade = new ServerFacade();
