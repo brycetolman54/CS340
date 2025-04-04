@@ -6,6 +6,7 @@ import {
     PutCommand,
     BatchGetCommand,
     QueryCommand,
+    UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DataPage } from "../../entity/DataPage";
@@ -38,7 +39,8 @@ export class DynamoFollowDAO implements FollowDAO {
             Item: this.generateFollowItem(alias, userToFollowAlias),
         };
         await this.client.send(new PutCommand(params));
-        // upfate count
+
+        await this.updateCount(alias, userToFollowAlias, 1);
     }
 
     // delete a follower
@@ -51,6 +53,32 @@ export class DynamoFollowDAO implements FollowDAO {
             Key: this.generateFollowItem(alias, userToUnfollowAlias),
         };
         await this.client.send(new DeleteCommand(params));
+
+        await this.updateCount(alias, userToUnfollowAlias, -1);
+    }
+
+    private async updateCount(
+        alias1: string,
+        alias2: string,
+        val: number
+    ): Promise<void> {
+        const updateAlias1Params = {
+            TableName: this.userTableName,
+            Key: { [this.userKey]: alias1 },
+            UpdateExpression: "ADD #v :v",
+            ExpressionAttributeNames: { "#v": this.followeesKey },
+            ExpressionAttributeValues: { ":v": val },
+        };
+        await this.client.send(new UpdateCommand(updateAlias1Params));
+
+        const updateAlias2Params = {
+            TableName: this.userTableName,
+            Key: { [this.userKey]: alias2 },
+            UpdateExpression: "ADD #v :v",
+            ExpressionAttributeNames: { "#v": this.followersKey },
+            ExpressionAttributeValues: { ":v": val },
+        };
+        await this.client.send(new UpdateCommand(updateAlias2Params));
     }
 
     // generate a key

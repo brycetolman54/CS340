@@ -1,34 +1,19 @@
 import { DynamoFactory } from "./model/daos/DynamoDB/DynamoFactory";
+import { FollowService } from "./model/service/FollowService";
 import { UserService } from "./model/service/UserService";
 
 async function Main() {
     const factory = new DynamoFactory();
     const userService = new UserService(factory);
-    const authDao = factory.getAuthorizationDAO();
+    const followService = new FollowService(factory);
     try {
-        // const [rUser, rToken] = await userService.register(
-        //     "bryce",
-        //     "tolman",
-        //     "bryce",
-        //     "hellopickle",
-        //     "image",
-        //     "jpg"
-        // );
-        // await userService.logout(rToken.token);
-
         const [user, token] = await userService.login("bryce", "hellopickle");
-        console.log("token: ", token.token);
-        const followers = await userService.getFollowCount(
+        const follower = await userService.getIsFollowerStatus(
             token.token,
-            {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                alias: user.alias,
-                imageUrl: user.imageUrl,
-            },
-            true
+            { firstName: "", lastName: "", alias: "buddy", imageUrl: "" },
+            { firstName: "", lastName: "", alias: "bryce", imageUrl: "" }
         );
-        console.log("followers: " + followers);
+        console.log("follower? ", follower);
         await userService.logout(token.token);
     } catch (error) {
         console.log("You got an error pickle: ", (error as Error).message);
