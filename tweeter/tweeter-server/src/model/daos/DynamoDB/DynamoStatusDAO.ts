@@ -12,7 +12,7 @@ import { DataPage } from "../../entity/DataPage";
 export class DynamoStatusDAO implements StatusDAO {
     private readonly storyTableName = "stories";
     private readonly feedTableName = "feeds";
-    private readonly userTableName = "user";
+    private readonly userTableName = "users";
     private readonly followTableName = "follows";
 
     private readonly primaryKey = "user_handle";
@@ -54,6 +54,7 @@ export class DynamoStatusDAO implements StatusDAO {
         const statusData = await this.client.send(
             new QueryCommand(statusParams)
         );
+
         const hasMorePages = statusData.LastEvaluatedKey !== undefined;
 
         const items: Status[] = [];

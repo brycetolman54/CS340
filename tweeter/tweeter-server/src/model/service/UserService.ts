@@ -37,7 +37,7 @@ export class UserService extends Service {
         const user = await this.userDAO.getUserWithPassword(alias, password);
 
         if (user === null) {
-            throw new Error("Bad Request: Invalid alias or password");
+            throw new Error("[Bad Request] Invalid alias or password");
         }
 
         const token = AuthToken.Generate();
@@ -62,7 +62,7 @@ export class UserService extends Service {
         );
 
         if (user === null) {
-            throw new Error("Bad Request: Invalid registration");
+            throw new Error("[Bad Request] Invalid registration");
         }
 
         const imageUrl = await this.imageDAO.putImage(

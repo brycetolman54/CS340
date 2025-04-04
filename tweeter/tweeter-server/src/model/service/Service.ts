@@ -13,7 +13,7 @@ export class Service {
     protected async checkToken(token: string): Promise<void> {
         let res = await this.authorizationDAO.checkToken(token);
         if (!res) {
-            throw new Error("Bad Request: invalid authorization token");
+            throw new Error("[Bad Request] invalid authorization token");
         }
     }
 }
