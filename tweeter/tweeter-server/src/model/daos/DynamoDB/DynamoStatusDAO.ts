@@ -18,6 +18,7 @@ export class DynamoStatusDAO implements StatusDAO {
     private readonly primaryKey = "user_handle";
     private readonly secondaryKey = "timestamp";
     private readonly postAttr = "post";
+    private readonly posterKey = "poster_handle";
 
     private readonly userKey = "user_handle";
     private readonly firstNameAttr = "firstName";
@@ -62,7 +63,7 @@ export class DynamoStatusDAO implements StatusDAO {
         let user = await this.getOneUser(alias);
 
         for (const item of statusData.Items || []) {
-            if (feed) user = await this.getOneUser(item[this.primaryKey]);
+            if (feed) user = await this.getOneUser(item[this.posterKey]);
 
             items.push(
                 new Status(item[this.postAttr], user, item[this.secondaryKey])
@@ -119,6 +120,7 @@ export class DynamoStatusDAO implements StatusDAO {
                     [this.primaryKey]: item[this.followerKey],
                     [this.secondaryKey]: status.timestamp,
                     [this.postAttr]: status.post,
+                    [this.posterKey]: item[this.followeeKey],
                 },
             };
             await this.client.send(new PutCommand(params));
