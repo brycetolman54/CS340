@@ -9,16 +9,15 @@ async function Main() {
     const followService = new FollowService(factory);
     const statusService = new StatusService(factory);
     try {
-        const [user, token] = await userService.login("bryce", "hellopickle");
-        const [feed, more] = await statusService.loadMoreStatusItems(
-            token.token,
-            user.alias,
-            10,
-            null,
-            false
+        const [user, token] = await userService.register(
+            "bryce",
+            "tolman",
+            "me",
+            "asdf",
+            "",
+            "jpg"
         );
-        console.log("more? ", more);
-        console.log("feed: ", feed);
+        console.log(user.alias);
         await userService.logout(token.token);
     } catch (error) {
         console.log("You got an error pickle: ", (error as Error).message);

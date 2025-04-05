@@ -34,7 +34,10 @@ export class UserService extends Service {
         alias: string,
         password: string
     ): Promise<[UserDto, AuthTokenDto]> {
-        const user = await this.userDAO.getUserWithPassword(alias, password);
+        const user = await this.userDAO.getUserWithPassword(
+            "@" + alias,
+            password
+        );
 
         if (user === null) {
             throw new Error("[Bad Request] Invalid alias or password");
@@ -57,7 +60,7 @@ export class UserService extends Service {
         let user = await this.userDAO.createUser(
             firstName,
             lastName,
-            alias,
+            "@" + alias,
             password
         );
 
@@ -70,11 +73,11 @@ export class UserService extends Service {
             imageFileExtension,
             alias
         );
-        await this.userDAO.updateImageURL(alias, imageUrl);
+        await this.userDAO.updateImageURL(user.alias, imageUrl);
         user.imageUrl = imageUrl;
 
         const token = AuthToken.Generate();
-        await this.authorizationDAO.addToken(token, alias);
+        await this.authorizationDAO.addToken(token, user.alias);
 
         return [user.dto, token.dto];
     }

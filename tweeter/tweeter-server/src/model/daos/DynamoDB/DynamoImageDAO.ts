@@ -7,7 +7,7 @@ import {
 import { ImageDAO } from "../ImageDAO";
 
 export class DynamoImageDAO implements ImageDAO {
-    private readonly BUCKET = "bat54-tweeter-images";
+    private readonly BUCKET = "bat54tweeter";
     private readonly REGION = "us-east-1";
 
     public async putImage(

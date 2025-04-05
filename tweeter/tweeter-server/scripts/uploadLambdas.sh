@@ -38,6 +38,7 @@ do
             --role $LAMBDA_ROLE \
             --handler "$handler" \
             --code S3Bucket=$BUCKET,S3Key=code/lambdalist.zip \
+            --timeout 10\
             1>>/dev/null \
             &
         echo lambda $i, "$function_name", created from s3
