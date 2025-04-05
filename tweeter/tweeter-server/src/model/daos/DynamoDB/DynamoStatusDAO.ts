@@ -114,7 +114,7 @@ export class DynamoStatusDAO implements StatusDAO {
 
         data.Items?.forEach(async (item) => {
             const params = {
-                TableName: this.followTableName,
+                TableName: this.feedTableName,
                 Item: {
                     [this.primaryKey]: item[this.followerKey],
                     [this.secondaryKey]: status.timestamp,
