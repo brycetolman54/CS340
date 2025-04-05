@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { Status, StatusDto, User } from "tweeter-shared";
-import { StatusDAO } from "../StatusDAO";
+import { StatusDAO } from "../general/StatusDAO";
 import { DataPage } from "../../entity/DataPage";
 
 export class DynamoStatusDAO implements StatusDAO {

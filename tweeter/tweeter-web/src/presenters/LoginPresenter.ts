@@ -3,11 +3,11 @@ import { AuthenticationPresenter } from "./AuthenticationPresenter";
 import { UserService } from "../model/services/UserService";
 
 export class LoginPresenter extends AuthenticationPresenter {
-    public authenticate(
+    public async authenticate(
         alias: string,
         password: string
     ): Promise<[User, AuthToken]> {
-        return this.service.login(alias, password);
+        return await this.service.login(alias, password);
     }
 
     protected navigate(originalUrl: string | undefined): void {

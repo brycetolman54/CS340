@@ -1,5 +1,5 @@
-import { AuthorizationDAO } from "../daos/AuthorizationDAO";
-import { FactoryDAO } from "../daos/FactoryDAO";
+import { AuthorizationDAO } from "../daos/general/AuthorizationDAO";
+import { FactoryDAO } from "../daos/general/FactoryDAO";
 
 export class Service {
     protected factory: FactoryDAO;

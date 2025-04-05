@@ -1,6 +1,6 @@
 import { UserDto, User } from "tweeter-shared";
-import { FactoryDAO } from "../daos/FactoryDAO";
-import { FollowDAO } from "../daos/FollowDAO";
+import { FactoryDAO } from "../daos/general/FactoryDAO";
+import { FollowDAO } from "../daos/general/FollowDAO";
 import { Service } from "./Service";
 
 export class FollowService extends Service {

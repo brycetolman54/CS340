@@ -10,7 +10,7 @@ export class FollowService {
         pageSize: number,
         lastItem: User | null
     ): Promise<[User[], boolean]> {
-        return this.serverFacade.getMoreFollowees({
+        return await this.serverFacade.getMoreFollowers({
             token: authToken.token,
             userAlias: userAlias,
             pageSize: pageSize,
@@ -24,7 +24,7 @@ export class FollowService {
         pageSize: number,
         lastItem: User | null
     ): Promise<[User[], boolean]> {
-        return this.serverFacade.getMoreFollowers({
+        return await this.serverFacade.getMoreFollowees({
             token: authToken.token,
             userAlias: userAlias,
             pageSize: pageSize,

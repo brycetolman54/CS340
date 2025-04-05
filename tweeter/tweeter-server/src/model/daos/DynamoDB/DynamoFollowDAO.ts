@@ -1,4 +1,4 @@
-import { FollowDAO } from "../FollowDAO";
+import { FollowDAO } from "../general/FollowDAO";
 import {
     DeleteCommand,
     DynamoDBDocumentClient,

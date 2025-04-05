@@ -1,5 +1,5 @@
-import { AuthorizationDAO } from "../AuthorizationDAO";
-import { FactoryDAO } from "../FactoryDAO";
+import { AuthorizationDAO } from "../general/AuthorizationDAO";
+import { FactoryDAO } from "../general/FactoryDAO";
 import { DynamoAuthorizationDAO } from "./DynamoAuthorizationDAO";
 import { DynamoFollowDAO } from "./DynamoFollowDAO";
 import { DynamoImageDAO } from "./DynamoImageDAO";

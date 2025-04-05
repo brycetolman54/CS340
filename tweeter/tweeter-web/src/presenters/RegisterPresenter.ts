@@ -3,7 +3,7 @@ import { AuthenticationPresenter } from "./AuthenticationPresenter";
 import { User, AuthToken } from "tweeter-shared";
 
 export class RegisterPresenter extends AuthenticationPresenter {
-    protected authenticate(
+    protected async authenticate(
         alias: string,
         password: string,
         firstName: string,
@@ -11,7 +11,7 @@ export class RegisterPresenter extends AuthenticationPresenter {
         imageBytes: Uint8Array,
         imageFileExtension: string
     ): Promise<[User, AuthToken]> {
-        return this.service.register(
+        return await this.service.register(
             firstName,
             lastName,
             alias,

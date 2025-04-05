@@ -1,9 +1,9 @@
 import { UserDto, AuthTokenDto, AuthToken } from "tweeter-shared";
-import { FactoryDAO } from "../daos/FactoryDAO";
-import { UserDAO } from "../daos/UserDAO";
-import { FollowDAO } from "../daos/FollowDAO";
+import { FactoryDAO } from "../daos/general/FactoryDAO";
+import { UserDAO } from "../daos/general/UserDAO";
+import { FollowDAO } from "../daos/general/FollowDAO";
 import { Service } from "./Service";
-import { ImageDAO } from "../daos/ImageDAO";
+import { ImageDAO } from "../daos/general/ImageDAO";
 
 export class UserService extends Service {
     private userDAO: UserDAO;

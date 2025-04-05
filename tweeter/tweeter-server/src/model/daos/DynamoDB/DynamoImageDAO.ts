@@ -4,7 +4,7 @@ import {
     PutObjectCommand,
     ObjectCannedACL,
 } from "@aws-sdk/client-s3";
-import { ImageDAO } from "../ImageDAO";
+import { ImageDAO } from "../general/ImageDAO";
 
 export class DynamoImageDAO implements ImageDAO {
     private readonly BUCKET = "bat54tweeter";

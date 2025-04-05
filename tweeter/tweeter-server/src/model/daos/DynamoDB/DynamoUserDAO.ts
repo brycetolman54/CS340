@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { User } from "tweeter-shared";
-import { UserDAO } from "../UserDAO";
+import { UserDAO } from "../general/UserDAO";
 import bcrypt from "bcryptjs";
 
 export class DynamoUserDAO implements UserDAO {

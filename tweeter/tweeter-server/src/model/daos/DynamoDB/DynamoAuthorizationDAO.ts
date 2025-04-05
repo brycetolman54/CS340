@@ -4,16 +4,18 @@ import {
     GetCommand,
     PutCommand,
     UpdateCommand,
+    QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { AuthToken } from "tweeter-shared";
-import { AuthorizationDAO } from "../AuthorizationDAO";
+import { AuthorizationDAO } from "../general/AuthorizationDAO";
 
 export class DynamoAuthorizationDAO implements AuthorizationDAO {
     private readonly tableName = "tokens";
     private readonly tokenKey = "token";
     private readonly aliasKey = "user_handle";
-    private readonly timestampKey = "timestap";
+    private readonly timestampKey = "timestamp";
+    private readonly indexName = "user_index";
 
     private readonly deltaTime = 600000;
 
@@ -61,7 +63,24 @@ export class DynamoAuthorizationDAO implements AuthorizationDAO {
     }
 
     public async addToken(token: AuthToken, alias: string): Promise<void> {
-        const params = {
+        const tokenParams = {
+            KeyConditionExpression: "#v = :v",
+            ExpressionAttributeNames: { "#v": this.aliasKey },
+            ExpressionAttributeValues: { ":v": alias },
+            TableName: this.tableName,
+            IndexName: this.indexName,
+        };
+        const tokenData = await this.client.send(new QueryCommand(tokenParams));
+
+        tokenData.Items?.forEach(async (item) => {
+            const params = {
+                TableName: this.tableName,
+                Key: { [this.tokenKey]: item[this.tokenKey] },
+            };
+            await this.client.send(new DeleteCommand(params));
+        });
+
+        const addParams = {
             TableName: this.tableName,
             Item: {
                 [this.tokenKey]: token.token,
@@ -69,7 +88,7 @@ export class DynamoAuthorizationDAO implements AuthorizationDAO {
                 [this.aliasKey]: alias,
             },
         };
-        await this.client.send(new PutCommand(params));
+        await this.client.send(new PutCommand(addParams));
     }
 
     public async getAliasFromToken(token: string): Promise<string> {

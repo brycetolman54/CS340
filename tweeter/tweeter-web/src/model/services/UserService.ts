@@ -9,14 +9,14 @@ export class UserService {
         authToken: AuthToken,
         alias: string
     ): Promise<User | null> {
-        return this.serverFacade.getUser({
+        return await this.serverFacade.getUser({
             token: authToken.token,
             alias: alias,
         });
     }
 
     public async logout(authToken: AuthToken): Promise<void> {
-        return this.serverFacade.logout({
+        return await this.serverFacade.logout({
             token: authToken.token,
         });
     }
@@ -25,7 +25,7 @@ export class UserService {
         alias: string,
         password: string
     ): Promise<[User, AuthToken]> {
-        return this.serverFacade.login({
+        return await this.serverFacade.login({
             alias: alias,
             password: password,
         });
@@ -42,7 +42,7 @@ export class UserService {
         const imageStringBase64: string =
             Buffer.from(userImageBytes).toString("base64");
 
-        return this.serverFacade.register({
+        return await this.serverFacade.register({
             firstName: firstName,
             lastName: lastName,
             alias: alias,
@@ -56,7 +56,7 @@ export class UserService {
         authToken: AuthToken,
         userToUnfollow: User
     ): Promise<[followerCount: number, followeeCount: number]> {
-        return this.serverFacade.unfollow({
+        return await this.serverFacade.unfollow({
             token: authToken.token,
             user: userToUnfollow.dto,
         });
@@ -66,7 +66,7 @@ export class UserService {
         authToken: AuthToken,
         userToFollow: User
     ): Promise<[followerCount: number, followeeCount: number]> {
-        return this.serverFacade.follow({
+        return await this.serverFacade.follow({
             token: authToken.token,
             user: userToFollow.dto,
         });
@@ -76,7 +76,7 @@ export class UserService {
         authToken: AuthToken,
         user: User
     ): Promise<number> {
-        return this.serverFacade.getFollowerCount({
+        return await this.serverFacade.getFollowerCount({
             token: authToken.token,
             user: user.dto,
         });
@@ -86,7 +86,7 @@ export class UserService {
         authToken: AuthToken,
         user: User
     ): Promise<number> {
-        return this.serverFacade.getFolloweeCount({
+        return await this.serverFacade.getFolloweeCount({
             token: authToken.token,
             user: user.dto,
         });
@@ -97,7 +97,7 @@ export class UserService {
         user: User,
         selectedUser: User
     ): Promise<boolean> {
-        return this.serverFacade.getIsFollowerStatus({
+        return await this.serverFacade.getIsFollowerStatus({
             token: authToken.token,
             user: user.dto,
             selectedUser: selectedUser.dto,
