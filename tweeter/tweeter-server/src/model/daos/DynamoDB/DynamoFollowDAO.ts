@@ -117,6 +117,10 @@ export class DynamoFollowDAO implements FollowDAO {
         const aliasData = await this.client.send(new QueryCommand(aliasParams));
         const hasMorePages = aliasData.LastEvaluatedKey !== undefined;
 
+        if (aliasData.Items?.length == 0) {
+            return new DataPage<User>([], hasMorePages);
+        }
+
         const userKeys = aliasData.Items?.map((item) => {
             return followers
                 ? { [this.userKey]: item[this.followerKey] }
@@ -193,8 +197,8 @@ export class DynamoFollowDAO implements FollowDAO {
                 lastItem === null
                     ? undefined
                     : {
-                          [this.followerKey]: alias,
-                          [this.followeeKey]: lastItem.alias,
+                          [this.followerKey]: lastItem.alias,
+                          [this.followeeKey]: alias,
                       },
         };
     }

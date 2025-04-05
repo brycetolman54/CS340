@@ -40,5 +40,5 @@ export class StatusService extends Service {
         const alias = await this.authorizationDAO.getAliasFromToken(token);
 
         await this.statusDAO.postStatus(newStatus, alias);
-    }
+    } // todo
 }

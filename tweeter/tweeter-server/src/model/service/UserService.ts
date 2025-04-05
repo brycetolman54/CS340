@@ -44,7 +44,7 @@ export class UserService extends Service {
         }
 
         const token = AuthToken.Generate();
-        await this.authorizationDAO.addToken(token, alias);
+        await this.authorizationDAO.addToken(token, user.alias);
 
         return [user.dto, token.dto];
     }
