@@ -61,13 +61,13 @@ export class DynamoStatusDAO implements StatusDAO {
 
         let user = await this.getOneUser(alias);
 
-        statusData.Items?.forEach(async (item) => {
+        for (const item of statusData.Items || []) {
             if (feed) user = await this.getOneUser(item[this.primaryKey]);
 
             items.push(
                 new Status(item[this.postAttr], user, item[this.secondaryKey])
             );
-        });
+        }
 
         return new DataPage<Status>(items, hasMorePages);
     }
