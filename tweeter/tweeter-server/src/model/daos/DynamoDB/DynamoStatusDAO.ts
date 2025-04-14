@@ -8,6 +8,10 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { Status, StatusDto, User } from "tweeter-shared";
 import { StatusDAO } from "../general/StatusDAO";
 import { DataPage } from "../../entity/DataPage";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
+
+const sqsClient = new SQSClient();
+const sqsUrl = "https://sqs.us-east-1.amazonaws.com/745138876849/PostsQ";
 
 export class DynamoStatusDAO implements StatusDAO {
     private readonly storyTableName = "stories";
@@ -100,18 +104,20 @@ export class DynamoStatusDAO implements StatusDAO {
         };
         await this.client.send(new PutCommand(userParams));
 
-        const followerParams = {
-            KeyConditionExpression: "#v = :v",
-            ExpressionAttributeNames: {
-                "#v": this.followeeKey,
-            },
-            ExpressionAttributeValues: {
-                ":v": alias,
-            },
-            TableName: this.followTableName,
-            IndexName: this.indexName,
+        const messageBody = JSON.stringify({
+            alias: alias,
+            post: status.post,
+            timestamp: status.timestamp,
+        });
+
+        const params = {
+            QueueUrl: sqsUrl,
+            MessageBody: messageBody,
         };
-        const data = await this.client.send(new QueryCommand(followerParams));
+
+        sqsClient.send(new SendMessageCommand(params));
+
+        //remove below
 
         data.Items?.forEach(async (item) => {
             const params = {
