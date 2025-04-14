@@ -17,7 +17,6 @@ export class DynamoStatusDAO implements StatusDAO {
     private readonly storyTableName = "stories";
     private readonly feedTableName = "feeds";
     private readonly userTableName = "users";
-    private readonly followTableName = "follows";
 
     private readonly primaryKey = "user_handle";
     private readonly secondaryKey = "timestamp";
@@ -28,10 +27,6 @@ export class DynamoStatusDAO implements StatusDAO {
     private readonly firstNameAttr = "firstName";
     private readonly lastNameAttr = "lastName";
     private readonly imageUrlAttr = "imageUrl";
-
-    private readonly followerKey = "follower_handle";
-    private readonly followeeKey = "followee_handle";
-    private readonly indexName = "follows_index";
 
     private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
 
@@ -116,20 +111,5 @@ export class DynamoStatusDAO implements StatusDAO {
         };
 
         sqsClient.send(new SendMessageCommand(params));
-
-        //remove below
-
-        data.Items?.forEach(async (item) => {
-            const params = {
-                TableName: this.feedTableName,
-                Item: {
-                    [this.primaryKey]: item[this.followerKey],
-                    [this.secondaryKey]: status.timestamp,
-                    [this.postAttr]: status.post,
-                    [this.posterKey]: item[this.followeeKey],
-                },
-            };
-            await this.client.send(new PutCommand(params));
-        });
     }
 }

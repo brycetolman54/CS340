@@ -7,6 +7,7 @@ const sqsClient = new SQSClient();
 const sqsUrl = "https://sqs.us-east-1.amazonaws.com/745138876849/JobsQ";
 
 const tableName = "follows";
+const followerKey = "follower_handle";
 const followeeKey = "followee_handle";
 const indexName = "follows_index";
 
@@ -30,13 +31,32 @@ export const handler = async function (event: any) {
         };
         const data = await dynamoClient.send(new QueryCommand(followerParams));
 
-        const numFollowers =
-            data.Items?.length == undefined ? 0 : data.Items.length;
+        if (data.Items == undefined) {
+            return;
+        }
 
-        // send batches of 1000 to the next q
-        for (let i = 0; i < numFollowers; i += 1000) {
+        const numFollowers = data.Items.length;
+        const batchSize = Math.ceil(numFollowers / 10);
+
+        // send batches to the next q
+        for (let i = 0; i < numFollowers; i += batchSize) {
             const batchOfUsers = [];
-            data.Items[i];
+            for (let j = i; j < batchSize; j++) {
+                if (i + j < numFollowers) {
+                    batchOfUsers.push(data.Items[i][followerKey]);
+                }
+            }
+            const messageBody = JSON.stringify({
+                poster: alias,
+                post: post,
+                timestamp: timestamp,
+                followers: batchOfUsers,
+            });
+            const params = {
+                QueueUrl: sqsUrl,
+                MessageBody: messageBody,
+            };
+            sqsClient.send(new SendMessageCommand(params));
         }
     }
 };
