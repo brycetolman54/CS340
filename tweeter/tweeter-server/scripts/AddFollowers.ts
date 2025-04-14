@@ -242,7 +242,7 @@ const followerImageUrl =
 const baseFollowerFirstName = "Donald";
 const baseFollowerLastName = "Duck";
 
-const numbUsersToCreate = 100;
+const numbUsersToCreate = 10000;
 const numbFollowsToCreate = numbUsersToCreate;
 const batchSize = 25;
 const aliasList: string[] = Array.from(
@@ -274,6 +274,7 @@ async function main() {
 async function createUsers(createdUserCount: number) {
     const userList = createUserList(createdUserCount);
     await fillUserTableDao.createUsers(userList, followerPassword);
+    await new Promise((res) => setTimeout(res, 100));
 
     createdUserCount += batchSize;
 
@@ -314,6 +315,7 @@ async function createFollows(createdFollowsCount: number) {
     );
 
     await fillFollowTableDao.createFollows(mainUsername, followList);
+    await new Promise((res) => setTimeout(res, 100));
 
     createdFollowsCount += batchSize;
 

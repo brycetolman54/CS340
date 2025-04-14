@@ -110,6 +110,6 @@ export class DynamoStatusDAO implements StatusDAO {
             MessageBody: messageBody,
         };
 
-        sqsClient.send(new SendMessageCommand(params));
+        await sqsClient.send(new SendMessageCommand(params));
     }
 }

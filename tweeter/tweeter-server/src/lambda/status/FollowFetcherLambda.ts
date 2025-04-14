@@ -36,14 +36,14 @@ export const handler = async function (event: any) {
         }
 
         const numFollowers = data.Items.length;
-        const batchSize = Math.ceil(numFollowers / 10);
+        const batchSize = Math.ceil(numFollowers / 100);
 
         // send batches to the next q
         for (let i = 0; i < numFollowers; i += batchSize) {
             const batchOfUsers = [];
-            for (let j = i; j < batchSize; j++) {
+            for (let j = 0; j < batchSize; j++) {
                 if (i + j < numFollowers) {
-                    batchOfUsers.push(data.Items[i][followerKey]);
+                    batchOfUsers.push(data.Items[i + j][followerKey]);
                 }
             }
             const messageBody = JSON.stringify({
@@ -56,7 +56,7 @@ export const handler = async function (event: any) {
                 QueueUrl: sqsUrl,
                 MessageBody: messageBody,
             };
-            sqsClient.send(new SendMessageCommand(params));
+            await sqsClient.send(new SendMessageCommand(params));
         }
     }
 };

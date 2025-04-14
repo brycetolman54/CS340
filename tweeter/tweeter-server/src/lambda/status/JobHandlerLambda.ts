@@ -28,7 +28,7 @@ export const handler = async function (event: any) {
                     [posterKey]: poster,
                 },
             };
-            client.send(new PutCommand(params));
+            await client.send(new PutCommand(params));
         }
     }
 };
