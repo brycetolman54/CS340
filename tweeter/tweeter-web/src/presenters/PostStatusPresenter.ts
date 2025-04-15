@@ -34,7 +34,7 @@ export class PostStatusPresenter extends Presenter<
                 this.view.displayInfoMessage("Status posted!", 2000);
             },
             "post the status",
-            () => {
+            async () => {
                 this.view.clearLastInfoMessage();
                 this._isLoading = false;
             }

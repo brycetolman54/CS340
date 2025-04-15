@@ -21,7 +21,6 @@ import {
     UserDto,
 } from "tweeter-shared";
 import { ClientCommunicator } from "./ClientCommunicator";
-import { FollowerPresenter } from "../presenters/FollowerPresenter";
 
 export class ServerFacade {
     private SERVER_URL =
